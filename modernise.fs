@@ -1,4 +1,11 @@
 ( TARGET SPECIFIC WORDS)
+27 constant ESC
+: COLORIZE ( n -- ) 
+	\ just like terminal ascii \e[31m, here use 31 colorize 
+	ESC EMIT ." [" base @ >R 
+	0 <# #S #> type 
+	R> base ! ." m"  
+; 
 
 \ Forth words for HIRES-mode graphics
 \ given these dialect-specific words an "adaptor shim" could be made for any other Forth
@@ -47,4 +54,18 @@
             endif
      endif
 ;    
+
+: checkversion ( -- exit|continue ) 
+	\ check gforth version 
+	version-string 2 - s\" 0.7" str= 0 >= if 	\ easy method to get tooling version
+		cr 
+		." you might update your gnu-forth version" cr
+		." prehistoric age is over" cr
+		cr
+		0 colorize
+		s" tput cnorm" system
+		page
+		bye
+	then
+;
      

@@ -19,16 +19,17 @@ __   __/ _ \ / _ \ / _ \
 Project seems abandoned since about 2 years now.
 
 - [ ] code documentation is currently so bad...
-- [ ] games is not starting automatically on load 
+- [X] games is not starting automatically on load 
 - [ ] key map is not pleasant to me 
-- [ ] missing a quit in game to go back to system 
-- [ ] there are no colors 
+- [X] missing a quit in game to go back to system 
+- [X] there are no colors 
 - [ ] there are no score file generated
-- [ ] why is there 2 key press needed on start 
+- [X] why is there 2 key press needed on start 
 - [ ] will try to do some improvement too
 - [ ] and many things not yet discovered
-- [ ] no gforth version checking 
-- [ ] will include original magazine notes too 
+- [X] no gforth version checking 
+- [ ] Modernize all the code & remove some useless words that are no more needed here
+- [X] will include original magazine notes too 
 - [X] missing LICENSE file as there was originally no file the [unlicensed](./LICENSE) is the one to use.
 
 # References

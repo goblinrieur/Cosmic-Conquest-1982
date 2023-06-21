@@ -7,7 +7,6 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 5 CONSTANT W2                       ( weight assigned to ship and troops)
 10 CONSTANT W3                      ( weight assigned to computers troops)
 20000 CONSTANT SPEED                ( how quickly computer moves)
-
 1000 constant delayms ( milliseconds to wait for in DELAY)
 
 ( VARIABLES)
@@ -40,7 +39,8 @@ needs modernise.fs
 ( DEFINING WORDS)
 : ARRAY ( 2D Array)
    CREATE DUP C, * ALLOT DOES>
-   ROT 1 - OVER C@ * + + ;
+   ROT 1 - OVER C@ * + + 
+;
 
 SIZE SIZE ARRAY GALAXY ( the galactic array array)
 SIZE SIZE ARRAY INFO1 ( planetary array)
@@ -56,32 +56,41 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 : CLEAR-MSGE                 ( clear message area on text screen)
    18 10 DO
            I 0 VHTAB 35 SPACES
-         LOOP ;
+         LOOP 
+;
 
 : XY@
-   X @ Y @ ;
+   X @ Y @ 
+;
 
 : CLEAR-SCREEN ( clear hires screen 1)
-   H1 HCLR ;
+   H1 HCLR 
+;
 
 : CLEAR-DISP ( fill screen array with FF's)
-   1 1 SCREEN 121 255 FILL ;
+   1 1 SCREEN 121 255 FILL 
+;
 
 : CLEAR-GALAXY ( fills galactic array with NULLS)
-   1 1 GALAXY SIZE SIZE * 0 FILL ;
+   1 1 GALAXY SIZE SIZE * 0 FILL 
+;
 
 : CLEAR-INFO ( fills info arrays with NULLs)
    1 1 INFO1 SIZE SIZE * 0 FILL
-   1 1 INFO2 SIZE SIZE * 0 FILL ;
+   1 1 INFO2 SIZE SIZE * 0 FILL 
+;
 
 : RANDOM1 ( --- ran) ( random number in range 1-SIZE)
-   RAND1 @ 37 * 651 + DUP RAND1 ! ABS SIZE MOD 1+ ;
+   RAND1 @ 37 * 651 + DUP RAND1 ! ABS SIZE MOD 1+ 
+;
 
 : RANDOM2 ( --- ran ) ( random number in range 1-SIZE)
-   RAND2 @ 53 * 773 + DUP RAND2 ! ABS SIZE MOD 1+ ;
+   RAND2 @ 53 * 773 + DUP RAND2 ! ABS SIZE MOD 1+ 
+;
 
 : EDGE-CHECK ( n --- ng ) ( calculates wrap around of galaxy)
-   SIZE 1 - + SIZE MOD 1+ ;
+   SIZE 1 - + SIZE MOD 1+ 
+;
 
 : INPUT ( --- n1 ) ( number input routine)
    0 BEGIN ( start with zero total)
@@ -97,25 +106,30 @@ SIZE SIZE ARRAY INFO2 ( strength array)
            ENDIF
          ENDIF
        ENDIF
-     UNTIL ;
+     UNTIL 
+;
 
 : F ( n1 --- add1 ) ( indexes current fleet array)
-   FLEET-FLAG @ SWAP FLEETS ;
+   FLEET-FLAG @ SWAP FLEETS 
+;
 \ : TEXT                      ( selects text screen )
-\  0 -16303 C! ;
+\  0 -16303 C! 
 
 : END-MSGE                  ( end of game message)
-   TEXT 12 0 VHTAB ." END OF GAME COMMANDER" ;
+   TEXT 12 0 VHTAB ." END OF GAME COMMANDER" 
+;
 
 ( graphics shapes and utilities)
 
 0 VARIABLE SPACEFIG 80 ALLOT  ( shape tables)
 
 : C$                        ( loads 8-bit value into table)
-   OVER C! 1+ ;
+   OVER C! 1+ 
+;
 
 : $                         ( loads 16-bit value into table)
-   OVER ! 2 + ;
+   OVER ! 2 + 
+;
 
 SPACEFIG                    ( load shape tables)
    12 $ 31 $ 41 $ 47 $ 63 $ 74 $ HEX
@@ -139,11 +153,12 @@ DECIMAL DROP
 \ FORGET C$  ( we don't need C$ and $ any more)
 
 : SKETCH  ( n ---  )    ( sketch shape n at current position)
-   2 * 0 SWAP SPACEFIG + w@ SPACEFIG + DRAW ;
+   2 * 0 SWAP SPACEFIG + w@ SPACEFIG + DRAW 
+;
 
 \ this won't work on 64-bit gForth or even 32-bit!
 \ this should probably be rewritten as
-\ 2 * 0 swap spacefig + w@ spacefig + draw ;
+\ 2 * 0 swap spacefig + w@ spacefig + draw 
 \ note that the fetch is now unsigned 16-bit
 
 ( into the main game words)
@@ -158,7 +173,8 @@ DECIMAL DROP
                    LOOP
    NO-OF-B-HOLES 0 DO 8 RANDOM1 RANDOM2 GALAXY C!
                       ( set up black holes)
-                   LOOP ;
+                   LOOP 
+;
 
 : INITIALISE         ( initialise all variables and arrays)
    CR CR
@@ -200,7 +216,8 @@ DECIMAL DROP
    DIFF @ 4 * C-FLEETS !   ( no. of computer fleets)
    SPEED DUP COMPUTER !
    COMP-START !   ( how often computer moves)
-   1 BUY-V ! ;
+   1 BUY-V ! 
+;
 
 : DRAW-BORDERS   ( draw borders o-f display and headings)
    CLEAR-SCREEN
@@ -220,7 +237,8 @@ DECIMAL DROP
    21 0  VHTAB ." NO. OF SHIPS ="
    22 0  VHTAB ." LEGIONS ="
    20 25 VHTAB ." SCORE ="
-   22 21 VHTAB ." CREDITS" ;
+   22 21 VHTAB ." CREDITS" 
+;
 
 : FIND-DIRECTION     (  --- X Y )
                      ( find out which square player means)
@@ -235,7 +253,8 @@ DECIMAL DROP
    ENDCASE
    23 0 VHTAB 35 SPACES   ( clear message )
    2 F C@ + EDGE-CHECK SWAP
-   1 F C@ + EDGE-CHECK SWAP ;
+   1 F C@ + EDGE-CHECK SWAP 
+;
 
 : PRINT-IT  ( c  --- )
             ( shape determined by c is printed on screen at)
@@ -275,7 +294,8 @@ DECIMAL DROP
       ENDCASE
 
    \ ENDIF
-   ;
+   
+;
 
 : DRAW-SCAN                       ( draw the screen display)
    1 F C@ 5 - 2 F C@ 5 -
@@ -287,7 +307,8 @@ DECIMAL DROP
            LOOP
            11 - SWAP 1+ SWAP
         LOOP
-   DROP DROP ;
+   DROP DROP 
+;
 
 : DRAW-FIGURES    ( draw the totals in the disp1ay)
    2 10 VHTAB PLANETS @ 5 .R
@@ -301,10 +322,12 @@ DECIMAL DROP
    20 9  VHTAB 1 F C@ 2 .R
    21 15 VHTAB 3 F w@ 4 .R
    22 10 VHTAB 5 F w@ 6 .R
-   22 31 VHTAB CREDIT @ 6 .R ;
+   22 31 VHTAB CREDIT @ 6 .R 
+;
 
 : DRAW-DISPLAY
-   1 SCALE H1 DRAW-SCAN DRAW-FIGURES ;
+   1 SCALE H1 DRAW-SCAN DRAW-FIGURES 
+;
 
 : NEW-FLEET  ( fleet destroyed for some reason)
    \ 24 0 vhtab ." fleet destroyed"
@@ -332,26 +355,32 @@ DECIMAL DROP
                          23 0 VHTAB 35 SPACES ENDOF
       DROP DROP
    ENDCASE
-   DRAW-DISPLAY ;
+   DRAW-DISPLAY 
+;
 
 : OTHER-FLEET   ( make other fleet curent fleet)
    FLEET-FLAG @ 1 =
    IF  2 FLEET-FLAG !
    ELSE 1 FLEET-FLAG !
    ENDIF
-   DRAW-DISPLAY ;
+   DRAW-DISPLAY 
+;
 
 : MOVE-LEFT
-   1 F C@ 2 F C@ 1 - CHECK-POSITION ;
+   1 F C@ 2 F C@ 1 - CHECK-POSITION 
+;
 
 : MOVE-RIGHT
-   1 F C@ 2 F C@ 1+ CHECK-POSITION ;
+   1 F C@ 2 F C@ 1+ CHECK-POSITION 
+;
 
 : MOVE-DOWN
-   1 F C@ 1+ 2 F C@ CHECK-POSITION ;
+   1 F C@ 1+ 2 F C@ CHECK-POSITION 
+;
 
 : MOVE-UP
-   1 F C@ 1 - 2 F C@ CHECK-POSITION ;
+   1 F C@ 1 - 2 F C@ CHECK-POSITION 
+;
 
 : ENLIST    ( enlisting 1egions on a planet)
    BUY-V @ 0=
@@ -374,7 +403,8 @@ DECIMAL DROP
        ENDIF
    ELSE
       10 0 VHTAB ." NO TROOPS AVAILABLE"
-   ENDIF ;
+   ENDIF 
+;
 
 : BUY    ( purchasing of ships at planet)
    BUY-V @ 0=
@@ -389,7 +419,8 @@ DECIMAL DROP
       16 1 F C@ 2 F C@ GALAXY C!  ( make sure fleet symbol there)
    ELSE
       10 0 VHTAB ." NO SHIPS AVAILABLE"
-   ENDIF ;
+   ENDIF 
+;
 
 : GATHER   ( pick up legions from garrison onto fleet)
    10 0 VHTAB ." HOW MANY DO YOU WISH TO TAKE?" INPUT
@@ -427,7 +458,8 @@ DECIMAL DROP
                            1 ( the default: leave planet)
       ENDCASE DELAY
    UNTIL
-   H1 CLEAR-MSGE DRAW-DISPLAY ;
+   H1 CLEAR-MSGE DRAW-DISPLAY 
+;
 
 : COLONISE ( attack an uncolonised planet)
    CLEAR-MSGE
@@ -448,7 +480,8 @@ DECIMAL DROP
       132 XY@ GALAXY C!       ( colony symbol in galaxy)
       DELAY DELAY
       FRIENDLY-PLANET
-   ENDIF ;
+   ENDIF 
+;
 
 : EMPTY-PLANET   ( in orbit round uncolonised planet)
    CLEAR-MSGE
@@ -458,11 +491,13 @@ DECIMAL DROP
    IF
       COLONISE
    ENDIF
-   H1 CLEAR-MSGE ;
+   H1 CLEAR-MSGE 
+;
 
 : NOT-PLANET   ( there isn't a planet where he's trying to land)
    10 0 VHTAB ." NO PLANET THERE"
-   DELAY H1 CLEAR-MSGE ;
+   DELAY H1 CLEAR-MSGE 
+;
 
 : ATTACK       ( attack a planet controlled by the computer)
    CLEAR-MSGE
@@ -488,7 +523,8 @@ DECIMAL DROP
       DELAY                   ( reduce classes of compo plnts)
       FRIENDLY-PLANET
    ENDIF
-   DELAY H1 CLEAR-MSGE ;
+   DELAY H1 CLEAR-MSGE 
+;
 
 : ENEMY-PLANET   ( player orbits enemy planet)
    XY@ INFO1 C@ 8 /
@@ -499,7 +535,8 @@ DECIMAL DROP
    IF
       ATTACK
    ENDIF
-   H1 CLEAR-MSGE ;
+   H1 CLEAR-MSGE 
+;
 
 : LAND   ( land on adjacent planet)
    FIND-DIRECTION
@@ -509,7 +546,8 @@ DECIMAL DROP
       5 ( computers planet)   OF ENEMY-PLANET    ENDOF
     132 ( players colony)     OF FRIENDLY-PLANET ENDOF
         NOT-PLANET  ( otherwise it's not a planet)
-   ENDCASE ;
+   ENDCASE 
+;
 
 : REVOLT? ( planet at X,Y revolts)
    12 0 VHTAB ." PLANET AT " Y @ . X @ . ." REVOLTS" DELAY
@@ -552,7 +590,8 @@ DECIMAL DROP
                LOOP
              LOOP
    CREDIT @ VTAX @ + CREDIT !            ( update credit)
-   H1 CLEAR-MSGE DRAW-DISPLAY ;
+   H1 CLEAR-MSGE DRAW-DISPLAY 
+;
 
 : COMPUTER-TURN   ( computers turn to do something)
    -1 NEW +!                            ( decrement NEW)
@@ -594,7 +633,8 @@ DECIMAL DROP
            DROP DROP
       ENDCASE
    LOOP
-   DRAW-FIGURES ;
+   DRAW-FIGURES 
+;
 
 : FIRE     ( players fleet attacks computer fleet)
    0 X !
@@ -633,12 +673,23 @@ DECIMAL DROP
          3 F w!
       ENDIF
    ENDIF
-   DELAY DELAY DRAW-DISPLAY H1 CLEAR-MSGE ;
+   DELAY DELAY DRAW-DISPLAY H1 CLEAR-MSGE 
+;
 
 : INFORMATION  ( display the text screen information)
-   TEXT KEY H1 ;
+   TEXT KEY H1 
+;
+
+: exitprog ( -- ) 
+	\ quit properly program
+	0 colorize		\ restore colors
+	s" tput cnorm" system 	\ restore cursor
+	page			\ clearscreen
+	bye
+;
 
 HEX
+
 
 : OBEY-COMMAND
    BUY-V @ -DUP ( fetch BUY-V, duplicate if nonzero)
@@ -657,14 +708,16 @@ HEX
       ( L) 4C OF LAND        ENDOF
       ( T) 54 OF TAX         ENDOF
       ( F) 46 OF FIRE        ENDOF
+      ( Q) 51 OF exitprog    ENDOF
+      ( q) 71 OF exitprog    ENDOF
    ENDCASE
 
    \ 24 0 vhtab .s ( print current state of stack )
 
    \ not sure why sp! is required here and it appears to be syntactically different from gForth
    \ this should reset the parameter stack, are there values ever left lying around?
-   \ SP! ;
-    ;
+   \ SP! 
+;
 
 \ think this needs to be here to reset base
 decimal
@@ -675,10 +728,12 @@ decimal
       COMP-START @ COMPUTER ! DROP 1
    ELSE
       COMPUTER ! 0
-   ENDIF ;
+   ENDIF 
+;
 
 : GAME-END?
-   LEN @ 0= ;    ( game end if LEN is zero)
+   LEN @ 0=     ( game end if LEN is zero)
+;
 
 : RESTART        ( restarts the stopped game)
    CLEAR-DISP
@@ -702,18 +757,20 @@ decimal
    \ slow the game a little by printing how many loops until it's the computer's turn
    0 30 vhtab computer @ .
    UNTIL
-   END-MSGE ;
+   END-MSGE 
+;
 
 : CONQUEST  ( the main game word)
-   hclr ( get all the mess of the screen)
-   HOME ." HIT ANY KEY" KEY RAND1 ! CR ( random number seed)
-        ." AND AGAIN  " KEY RAND2 !    ( random number seed)
-   HOME CR CR CR
-   ." WELCOME TO COSMIC CONQUEST" CR CR
-   ." DEVISED AND WRITTEN BY" CR CR
-   ." ALAN SARTORI-ANGUS"
+   checkversion 
+   page	\ clear screen
+   31 colorize
+   s" gamedata/title.txt" slurp-file type rand1 ! cr		\ title 
+   33 colorize
+   s" tput civis" system					\ hide cursor to avoid it blinking 
+   s" gamedata/author.txt" slurp-file cr type key Rand2 ! cr 	\ auhor
    INITIALISE
-   RESTART ;
+   RESTART 
+;
 
-\ CONQUEST
-\ BYE
+CONQUEST	\ main
+BYE
