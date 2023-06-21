@@ -13,18 +13,6 @@ variable fd-in
 	0 <# #S #> type 
 	R> base ! ." m"  
 ; 
-\ Forth words for HIRES-mode graphics
-\ given these dialect-specific words an "adaptor shim" could be made for any other Forth
-: hcolour ( colour ---) drop ;	( select current colour for HIRES drawing mode)
-: hline ( x y --- ) 2drop ;	( draw HIRES mode line to position)
-: hposn ( x y --- ) 2drop ;	( moves HIRES mode pixel cursor)
-: scale ( scale --- ) drop ;	( sets shape table scaling value)
-: draw ( addr delim --- ) ( draw shape table, presumably first value is address and second is delimiter)
-   2drop  ( discard values from stack)
-;
-\ as far as it is only drops I would choose between keeping it for historic & replace them all in main code : keep it :) 
-\ implement home, hclr and vhtab using ANSI commands
-\ SEE: https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 : home ( --- ) ( set cursor to home position, using ANSI codes)
 	.\" \e[H" 
 ;
@@ -33,7 +21,7 @@ variable fd-in
 	page
 ;
 \
-: vhtab ( y x --- ) ( position cursor on screen, using ANSI codes)
+: vhtab ( y x -- x y -- ) ( position cursor on screen, using ANSI codes)
 	swap at-xy
 ;
 ( POSSIBLE FIG WORDS NOT SUPPORTED IN ANS FORTH)

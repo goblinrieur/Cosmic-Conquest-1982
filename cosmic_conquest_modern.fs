@@ -117,11 +117,10 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 ;
 
 : END-MSGE                  ( end of game message)
-   12 0 vhtab ." END OF GAME COMMANDER" 
+   12 0 vhtab ." END OF GAME COMMANDER " 
 ;
 
 ( graphics shapes and utilities)
-
 0 VARIABLE SPACEFIG 80 ALLOT  ( shape tables)
 
 : C$                        ( loads 8-bit value into table)
@@ -131,8 +130,8 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 : $                         ( loads 16-bit value into table)
    OVER ! 2 + 
 ;
-
-SPACEFIG                    ( load shape tables)  \ map
+\ this is a static map
+SPACEFIG                    ( load shape tables)  \ game map 
    12 $ 31 $ 41 $ 47 $ 63 $ 74 $ HEX
 ( space shape)
    24 C$ 3F C$ 37 C$ 36 C$ 2E C$ 24 C$ 2C C$ 36 C$ 2E C$ 2C C$
@@ -149,20 +148,12 @@ SPACEFIG                    ( load shape tables)  \ map
    00 C$
 ( computers fleet shape)
    36 C$ 07 C$ 20 C$ 29 C$ 32 C$ 00 C$
-
+\ feel free to modify the map 
 DECIMAL DROP
-\ FORGET C$  ( we don't need C$ and $ any more)
-
 : SKETCH  ( n ---  )    ( sketch shape n at current position)
-   2 * 0 SWAP SPACEFIG + w@ SPACEFIG + DRAW 
+   2 * 0 SWAP SPACEFIG + w@ SPACEFIG + 2drop
 ;
-
-\ this won't work on 64-bit gForth or even 32-bit!
-\ this should probably be rewritten as
-\ 2 * 0 swap spacefig + w@ spacefig + draw 
-\ note that the fetch is now unsigned 16-bit
-( into the main game words)
-
+\ now adds galaxy
 : SET-UP-GALAXY
    NO-OF-STARS 0 DO 2 RANDOM1 RANDOM2 GALAXY C!
                  LOOP   ( set up stars in galaxy)
@@ -222,11 +213,6 @@ DECIMAL DROP
 
 : DRAW-BORDERS   ( draw borders o-f display and headings)
    CLEAR-SCREEN
-   7 HCOLOUR     ( colour white)
-   17 5 HPOSN
-      238 5 HLINE 238 126 HLINE 17 126 HLINE 17 5 HLINE
-   57 27 HPOSN
-      198 27 HLINE 198 104 HLINE 57 104 HLINE 57 27 HLINE
    HOME
    32 colorize
    ." PLAYER"
@@ -270,11 +256,9 @@ DECIMAL DROP
 	\ ELSE
       dup \ for ANSI print
       DUP X @ 1+ Y @ 1+ SCREEN C! ( remember what screen has)
-      0 HCOLOUR                   ( colour black)
-      X @ 20 * 27 + Y @ 1+ 11 * HPOSN
+      X @ 20 * 27 + Y @ 1+ 11 * 2drop
       0 SKETCH                    ( blank out char. there)
-      7 HCOLOUR                   ( colour white)
-      X @ 20 * 27 + Y @ 1+ 11 * HPOSN
+      X @ 20 * 27 + Y @ 1+ 11 * 2drop
       CASE                        ( draw shape)
          2 ( a star)         OF 3 SKETCH ( draw star)     ENDOF
          4 ( empty planet)   OF 2 SKETCH ( a planet)      ENDOF
@@ -327,7 +311,7 @@ DECIMAL DROP
 ;
 
 : DRAW-DISPLAY
-   1 SCALE DRAW-SCAN DRAW-FIGURES 
+   DRAW-SCAN DRAW-FIGURES 
 ;
 
 : NEW-FLEET  ( fleet destroyed for some reason)
