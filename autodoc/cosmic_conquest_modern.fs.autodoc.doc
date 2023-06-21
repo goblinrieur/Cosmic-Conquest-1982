@@ -1,6 +1,6 @@
+250 constant delayms 		    ( milliseconds to wait for in DELAY) \ accelerate by 4
 : ARRAY ( 2D Array)
 : DELAY                      ( delay a fixed amount of time)
-   \ 5000 0 DO LOOP ;  ( in BASIC FOR I=1 TO 5000:NEXT takes about four seconds, seems too long)
 : CLEAR-MSGE                 ( clear message area on text screen)
 : XY@
 : CLEAR-SCREEN ( clear hires screen 1)
@@ -15,6 +15,7 @@
 : END-MSGE                  ( end of game message)
 : C$                        ( loads 8-bit value into table)
 : $                         ( loads 16-bit value into table)
+SPACEFIG                    ( load shape tables)  \ map
 \ FORGET C$  ( we don't need C$ and $ any more)
 : SKETCH  ( n ---  )    ( sketch shape n at current position)
 \ this won't work on 64-bit gForth or even 32-bit!
@@ -55,16 +56,21 @@
 : DEPLOY   ( leave legions from fleet on planet as garrison)
 : FRIENDLY-PLANET   ( options upon landing at colony)
 : COLONISE ( attack an uncolonised planet)
+      200 start +! 		\ capture planets increases score now
 : EMPTY-PLANET   ( in orbit round uncolonised planet)
 : NOT-PLANET   ( there isn't a planet where he's trying to land)
 : ATTACK       ( attack a planet controlled by the computer)
+	500 start +! 		\ increase score then ! 
 : ENEMY-PLANET   ( player orbits enemy planet)
 : LAND   ( land on adjacent planet)
 : REVOLT? ( planet at X,Y revolts)
+	-1000 start +! 			\ loosing planet makes a score crash ! 
 : TAX     ( collect taxes on players planets)
+			VTAX @ start +! \ add tax on score ! 
 : COMPUTER-TURN   ( computers turn to do something)
 : FIRE     ( players fleet attacks computer fleet)
-: INFORMATION  ( display the text screen information)
+      10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 1 + start ! \ add 1 to score on combat
+      start @ 4 + start ! \ add 5 to score on winning a fight
 : exitprog ( -- ) 
 	\ quit properly program
 	0 colorize		\ restore colors
@@ -77,13 +83,15 @@
    \ SP! 
 \ think this needs to be here to reset base
 : COMPUTER?    ( is it the computers turn or not)
-: GAME-END?
+: othergamend? ( -- ) 
+	\ other conditions to end the game
 : RESTART        ( restarts the stopped game)
       \ ?TERMINAL
       \ I think this means something else here, is ?TERMINAL meant to mean "check for keypress"
       \ rather than "check for break" ?
          \ -1 LEN + !
          \ COMPUTER-TURN
+      othergamend? ( exit ? ) \ new way to end the game
    \ slow the game a little by printing how many loops until it's the computer's turn
 : CONQUEST  ( the main game word)
    page	\ clear screen
