@@ -25,21 +25,16 @@ SPACEFIG                    ( load shape tables)  \ game map
 : DRAW-BORDERS   ( draw borders o-f display and headings)
 : FIND-DIRECTION     (  --- X Y )
 : PRINT-IT  ( c  --- )
-	\ DUP X @ 1+ Y @ 1+ SCREEN C@ =
-	\ IF  ( display is already showing this shape so don't bother)
-	\   DROP
-	\ ELSE
-      dup \ for ANSI print
-      \ and once again, in ANSI
-      \ FIXME this needs moved out to a separate file
-   \ ENDIF
+	dup \ for ANSI print
+	\ and once again, in ANSI
+	\ FIXME this needs moved out to a separate file
 : DRAW-SCAN                       ( draw the screen display)
 : DRAW-FIGURES    ( draw the totals in the disp1ay)
 : DRAW-DISPLAY
 : NEW-FLEET  ( fleet destroyed for some reason)
-   \ 24 0 vhtab ." fleet destroyed"
-   \ you can still move the fleet cursor around though
-   \ and buy more ships and take on more legions
+	\ 24 0 vhtab ." fleet destroyed"
+	\ you can still move the fleet cursor around though
+	\ and buy more ships and take on more legions
 : MOVE-FLEET (  X Y ---  )
 : CHECK-POSITION  ( X Y --- )
 : OTHER-FLEET   ( make other fleet curent fleet)
@@ -54,21 +49,21 @@ SPACEFIG                    ( load shape tables)  \ game map
 : DEPLOY   ( leave legions from fleet on planet as garrison)
 : FRIENDLY-PLANET   ( options upon landing at colony)
 : COLONISE ( attack an uncolonised planet)
-      200 score +! 		\ capture planets increases score now
+		200 score +! 		\ capture planets increases score now
 : EMPTY-PLANET   ( in orbit round uncolonised planet)
 : NOT-PLANET   ( there isn't a planet where he's trying to land)
 : ATTACK       ( attack a planet controlled by the computer)
-	500 score +! 		\ increase score then ! 
+		500 score +! 		\ increase score then ! 
 : ENEMY-PLANET   ( player orbits enemy planet)
 : LAND   ( land on adjacent planet)
 : REVOLT? ( planet at X,Y revolts)
-	-1000 score +! 			\ loosing planet makes a score crash ! 
+		-1000 score +! 			\ loosing planet makes a score crash ! 
 : TAX     ( collect taxes on players planets)
-			VTAX @ score +! \ add tax on score ! 
+				VTAX @ score +! \ add tax on score ! 
 : COMPUTER-TURN   ( computers turn to do something)
 : FIRE     ( players fleet attacks computer fleet)
-      10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 100 + start ! \ add 1 to score on combat
-      start @ 400 + start ! \ add 5 to score on winning a fight
+		10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 100 + start ! \ add 1 to score on combat
+			start @ 400 + start ! \ add 5 to score on winning a fight
 : exitprog ( -- ) 
 	\ quit properly program
 	highscore?		\ write highscore if possble (if player made it)
@@ -76,25 +71,25 @@ SPACEFIG                    ( load shape tables)  \ game map
 	0 colorize		\ restore colors
 	s" tput cnorm" system 	\ restore cursor
 : OBEY-COMMAND
-   \ 24 0 vhtab .s ( print current state of stack )
-   \ not sure why sp! is required here and it appears to be syntactically different from gForth
-   \ this should reset the parameter stack, are there values ever left lying around?
-   \ SP! 
+	\ 24 0 vhtab .s ( print current state of stack )
+	\ not sure why sp! is required here and it appears to be syntactically different from gForth
+	\ this should reset the parameter stack, are there values ever left lying around?
+	\ SP! 
 \ think this needs to be here to reset base
 : COMPUTER?    ( is it the computers turn or not)
 : othergamend? ( -- ) 
 	\ other conditions to end the game
 : RESTART        ( restarts the stopped game)
-      \ ?TERMINAL
-      \ I think this means something else here, is ?TERMINAL meant to mean "check for keypress"
-      \ rather than "check for break" ?
-         \ -1 LEN + !
-         \ COMPUTER-TURN
-      othergamend? ( exit ? ) \ new way to end the game
-   \ slow the game a little by printing how many loops until it's the computer's turn
+		\ ?TERMINAL
+		\ I think this means something else here, is ?TERMINAL meant to mean "check for keypress"
+		\ rather than "check for break" ?
+			\ -1 LEN + !
+			\ COMPUTER-TURN
+		othergamend? ( exit ? ) \ new way to end the game
+		\ slow the game a little by printing how many loops until it's the computer's turn
 : CONQUEST  ( the main game word)
-   page	\ clear screen
-   s" gamedata/title.txt" slurp-file type rand1 ! cr		\ title 
-   s" tput civis" system					\ hide cursor to avoid it blinking 
-   s" gamedata/author.txt" slurp-file cr type key Rand2 ! cr 	\ auhor
+	page	\ clear screen
+	s" gamedata/title.txt" slurp-file type rand1 ! cr		\ title 
+	s" tput civis" system					\ hide cursor to avoid it blinking 
+	s" gamedata/author.txt" slurp-file cr type key Rand2 ! cr 	\ auhor
 CONQUEST	\ main

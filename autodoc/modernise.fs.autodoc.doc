@@ -1,18 +1,19 @@
+\ targets might be only PC/Smartphones/TAbs now ...  so ...  feel free to use high level modern gforth words words
 create fname 8 allot s" .score" fname place						\ nice way to assign a file name 
 variable tobeat 									\ to know if new high score is reached
 \ words
 : COLORIZE ( n -- ) 
 	\ just like terminal ascii \e[31m, here use 31 colorize 
-: home ( --- ) ( set cursor to home position, using ANSI codes)
+: home ( -- ) ( set cursor to home position, using ANSI codes)
 \ real HCLR would clear HIRES1
-: hclr ( --- ) ( clear screen using ANSI codes)
+: hclr ( -- ) ( clear screen using ANSI codes)
 : vhtab ( y x -- x y -- ) ( position cursor on screen, using ANSI codes)
 \ HELPFUL RESOURCE: https://dwheeler.com/6502/fig-forth-glossary.txt
 \ Helpful book: Forth Fundamentals Vol. 2, C. Kevin McCabe, dilithium Press 1983, ISBN 0-88056-092-4
 : MINUS negate	 ( FFv2 page 97) ;
 : -DUP ?dup	 ( FFv2 page 39) ;
 \ this woudln't be a problem on the Apple ][ but on modern systems the KEY routine is case sensitive
-: inkey ( --- key)
+: inkey ( -- key)
 \ not really needed as far as I guess noone uses versions of gforth older than 0.7.x
 : checkversion ( -- exit|continue ) 
 	\ check gforth version 
