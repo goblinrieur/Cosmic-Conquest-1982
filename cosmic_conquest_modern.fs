@@ -7,7 +7,7 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 5 CONSTANT W2                       ( weight assigned to ship and troops)
 10 CONSTANT W3                      ( weight assigned to computers troops)
 20000 CONSTANT SPEED                ( how quickly computer moves)
-1000 constant delayms ( milliseconds to wait for in DELAY)
+250 constant delayms 		    ( milliseconds to wait for in DELAY) \ accelerate by 4
 
 ( VARIABLES)
 0 VARIABLE BUY-V        ( count to stop player buying every move)
@@ -35,11 +35,12 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 
 ( TARGET SPECIFIC WORDS)
 needs modernise.fs
+require random.fs
 
 ( DEFINING WORDS)
 : ARRAY ( 2D Array)
-   CREATE DUP C, * ALLOT DOES>
-   ROT 1 - OVER C@ * + + 
+	CREATE DUP C, * ALLOT DOES>
+	ROT 1 - OVER C@ * + + 
 ;
 
 SIZE SIZE ARRAY GALAXY ( the galactic array array)
@@ -50,12 +51,12 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 
 ( general utility words)
 : DELAY                      ( delay a fixed amount of time)
-   \ 5000 0 DO LOOP ;  ( in BASIC FOR I=1 TO 5000:NEXT takes about four seconds, seems too long)
-   delayms ms ; ( wait a second.  Is this long enough?  Who knows, should probably be a CONSTANT)
+   delayms ms  ( wait a second.  Is this long enough?  Who knows, should probably be a CONSTANT)
+;
 
 : CLEAR-MSGE                 ( clear message area on text screen)
    18 10 DO
-           I 0 vhtab 35 SPACES
+           I 0 vhtab 50 SPACES
          LOOP 
 ;
 
@@ -129,12 +130,12 @@ SIZE SIZE ARRAY INFO2 ( strength array)
    OVER ! 2 + 
 ;
 
-SPACEFIG                    ( load shape tables)
+SPACEFIG                    ( load shape tables)  \ map
    12 $ 31 $ 41 $ 47 $ 63 $ 74 $ HEX
 ( space shape)
    24 C$ 3F C$ 37 C$ 36 C$ 2E C$ 24 C$ 2C C$ 36 C$ 2E C$ 2C C$
    2E C$ 25 C$ 24 C$ 3C C$ 37 C$ 2E C$ 34 C$ 36 C$ 00 C$
-( colony shape)
+( colony shape)	
    12 C$ 2D C$ 24 C$ 24 C$ 3F C$ 3F C$ 36 C$ 36 C$ 2D C$ 00 C$
 ( planet shape )
    2C C$ 36 C$ 3F C$ 24 C$ 05 C$ 00 C$
@@ -158,7 +159,6 @@ DECIMAL DROP
 \ this should probably be rewritten as
 \ 2 * 0 swap spacefig + w@ spacefig + draw 
 \ note that the fetch is now unsigned 16-bit
-
 ( into the main game words)
 
 : SET-UP-GALAXY
@@ -287,8 +287,8 @@ DECIMAL DROP
       Y @ 8 + X @ 2 * 12 + vhtab
       CASE                        ( draw shape)
          2 ( a star)         OF 33 colorize ." *" 0 colorize ( draw star)     ENDOF
-         4 ( empty planet)   OF 32 colorize ." O" 0 colorize ( a planet)      ENDOF
-         5 ( enemy planet)   OF 32 colorize ." 0" 0 colorize ( a planet)      ENDOF
+         4 ( empty planet)   OF 36 colorize ." O" 0 colorize ( a planet)      ENDOF
+         5 ( enemy planet)   OF 36 colorize ." 0" 0 colorize ( a planet)      ENDOF
        132 ( players planet) OF 31 colorize ." @" 0 colorize ( a colony)      ENDOF
         16 ( players fleet)  OF 0 colorize ." P" 0 colorize ( players fleet)  ENDOF
         17 ( enemy fleet)    OF 31 colorize ." E" 0 colorize ( enemy fleet)   ENDOF
@@ -317,7 +317,7 @@ DECIMAL DROP
 	TROOPS @ W3 * - 6 .R
 	6 8   vhtab C-FLEETS @ 5 .R
 	6 29  vhtab C-PLANETS @ 5 .R
-	20 2  vhtab 2 F C@ 2 .R
+	20 3  vhtab 2 F C@ 2 .R
 	20 9  vhtab 1 F C@ 2 .R
 	21 15 vhtab 3 F w@ 4 .R
 	22 10 vhtab 5 F w@ 6 .R
@@ -415,7 +415,7 @@ DECIMAL DROP
       5 BUY-V !               ( stop continous buying)
       RANDOM1 5 / XY@ INFO1 C@ 10 / + 1+ DUP TEMP1 !
       10 0 vhtab ." COST PER SHIP = " 2 .R
-      12 0 vhtab ." HOW MANY DO YOU WANT?" INPUT
+      12 0 vhtab ." HOW MANY DO YOU WANT? " INPUT
       CREDIT @ TEMP1 @ / MIN    ( no more than he can afford)
       DUP 3 F w@ + 3 F w!       ( update ships in fleet)
       TEMP1 @ * CREDIT @ SWAP - CREDIT !  ( update credit)
@@ -484,6 +484,7 @@ DECIMAL DROP
       TEMP1 @ 3 .R
       5 F w@ TEMP1 @ - 5 F w!   ( update legions in fleet)
       1 PLANETS +!            ( increment no. of planets)
+      200 start +! 		\ capture planets increases score now
       132 XY@ GALAXY C!       ( colony symbol in galaxy)
       DELAY DELAY
       FRIENDLY-PLANET
@@ -525,6 +526,7 @@ DECIMAL DROP
       5 F w@ TEMP1 @ - 5 F w!    ( update legions with fleet)
       132 XY@ GALAXY C!        ( put colony in galaxy)
       1 PLANETS +!             ( increment planets)
+	500 start +! 		\ increase score then ! 
       -1 C-PLANETS +!          ( decrement computer planets)
       XY@ INFO1 C@ 8 / MINUS CLASS-TOTALS +!
       DELAY                   ( reduce classes of compo plnts)
@@ -564,7 +566,7 @@ DECIMAL DROP
       8 * 7 + XY@ INFO1 C!            ( set revolt factor 7)
       0 XY@ INFO2 C!                  ( set lpgions to 0)
       -1 PLANETS +!                   ( reduce no.of planets )
-      7 EMIT                          ( ring bell)
+	-1000 start +! 			\ loosing planet makes a score crash ! 
       14 0 vhtab ." SUCCEEDS"
    ELSE ( revolt fails)
       SWAP 2 / - XY@ INFO2 C!         ( reduce legions)
@@ -585,6 +587,7 @@ DECIMAL DROP
                  IF   ( it's a colony)
                     I J INFO1 C@ 3 * 5 / ( tax from planet)
                     VTAX @ + DUP VTAX !  ( update tax)
+			VTAX @ start +! \ add tax on score ! 
                     10 17 vhtab 5 .R
                     I J INFO1 C@ 7 AND -DUP
                     IF ( doesn't revolt)
@@ -644,7 +647,6 @@ DECIMAL DROP
 
 : FIRE     ( players fleet attacks computer fleet)
    0 X !
-   
    2 F C@ 2 + DUP 3 - DO
       1 F C@ 2 + DUP 3 - DO
          I EDGE-CHECK J EDGE-CHECK GALAXY C@ 17 =
@@ -655,17 +657,16 @@ DECIMAL DROP
    LOOP
    X @ 0=
    IF
-	
       10 0 vhtab ." NO ENEMY FLEET IN RANGE"
    ELSE
       3 F w@ XY@ INFO2 C@ OVER 4 * 10 /
       OVER 4 * 10 / DUP
-      10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS"
+      10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 1 + start ! \ add 1 to score on combat
       ROT ROT - 0 MAX DUP 0=
       IF ( computers fleet destroyed)
       DROP TROOPS @ XY@ INFO2 C@ - TROOPS !
+      start @ 4 + start ! \ add 5 to score on winning a fight
       ( reduce computers troops)
-
       0 XY@ GALAXY C!          ( destroy fleet symbol)
          -1 C-FLEETS +!        ( reduce comps fleets)
       ELSE
@@ -681,10 +682,6 @@ DECIMAL DROP
       ENDIF
    ENDIF
    DELAY DELAY DRAW-DISPLAY CLEAR-MSGE 
-;
-
-: INFORMATION  ( display the text screen information)
-   KEY 
 ;
 
 : exitprog ( -- ) 
@@ -709,7 +706,7 @@ HEX
       ( I) 49 OF MOVE-UP     ENDOF
       ( k) 4B OF MOVE-DOWN   ENDOF
       ( C) 43 OF OTHER-FLEET ENDOF
-      ( R) 52 OF INFORMATION ENDOF
+      ( R) 52 OF KEY ENDOF
       ( G) 47 OF LAND        ENDOF
       ( T) 54 OF TAX         ENDOF
       ( F) 46 OF FIRE        ENDOF
@@ -734,11 +731,14 @@ decimal
    ENDIF 
 ;
 
-: GAME-END?
-   LEN @ 0=     ( game end if LEN is zero)
+: othergamend? ( -- ) 
+	\ other conditions to end the game
+	start @ -5000 <= if 31 colorize ." Critical score : Game ENDED ! " key exitprog then 
+	LEN @ 0 <= if 31 colorize ." to much moves : Game ENDED ! " key exitprog then 
 ;
 
 : RESTART        ( restarts the stopped game)
+   rnd
    CLEAR-DISP
    HOME DRAW-BORDERS DRAW-DISPLAY
    BEGIN
@@ -756,7 +756,8 @@ decimal
       IF
          COMPUTER-TURN
       ENDIF
-      GAME-END?
+      othergamend? ( exit ? ) \ new way to end the game
+      LEN @ 0=
    \ slow the game a little by printing how many loops until it's the computer's turn
    0 30 vhtab computer @ .
    UNTIL

@@ -22,7 +22,8 @@
 
 \ real HCLR would clear HIRES1
 : hclr ( --- ) ( clear screen using ANSI codes)
-   .\" \e[2J" ; ( '.\" " is hard to Google for but means print, using C-style escape sequences) 
+   page
+;
 
 : vhtab ( y x --- ) ( position cursor on screen, using ANSI codes)
    swap .\" \e[" 
@@ -31,7 +32,8 @@
    0 <# #s #> type ." H" ;
 
 : draw ( addr delim --- ) ( draw shape table, presumably first value is address and second is delimiter)
-   drop drop ; ( discard values from stack)
+   2drop  ( discard values from stack)
+;
 
 ( POSSIBLE FIG WORDS NOT SUPPORTED IN ANS FORTH)
 \ HELPFUL RESOURCE: https://dwheeler.com/6502/fig-forth-glossary.txt
