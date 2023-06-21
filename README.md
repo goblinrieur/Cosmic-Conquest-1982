@@ -26,7 +26,7 @@ Project seems abandoned since about 2 years now.
 - [ ] there are no score file generated
 - [ ] why is there 2 key press needed on start 
 - [ ] will try to do some improvement too
-- [ ] and many things not yet discovered
+- [ ] and many things not yet discovered
 - [X] missing LICENSE file as there was originally no file the [unlicensed](./LICENSE) is the one to use.
 - [ ] no gforth version checking 
 - [ ] will include original magazine notes too 
@@ -42,9 +42,9 @@ Attempts at emulation have not gone well because we cannot determine the exact F
 # Contents of This Repo
 
  * `Original` - repo as is before forking it
- * `pages/` - Individual listing for each page as they appeared in the magazine.
- * `cosmic_conquest.fs` - A historic listing of the unmodified source code.
  * `cosmic_conquest_modern.fs` - "40Th Anniversary Edition". A modernized version of the game, playable on GForth.
+ * `modernize.fs` - also comes from fork
+
 
 # How to Run - TO BE CHANGED
 
