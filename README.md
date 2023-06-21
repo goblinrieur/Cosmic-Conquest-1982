@@ -14,6 +14,8 @@ __   __/ _ \ / _ \ / |
                       
 ```
 
+![2.png](./gamedata/2.png)
+
 # Why forking ?
 
 Project seems abandoned since about 2 years now.
@@ -30,6 +32,8 @@ Project seems abandoned since about 2 years now.
 - [X] there are no colors 
 - [X] why is there 2 key press needed on start 
 - [X] will include original magazine notes too 
+
+![1.png](./gamedata/1.png)
 
 # References
 
