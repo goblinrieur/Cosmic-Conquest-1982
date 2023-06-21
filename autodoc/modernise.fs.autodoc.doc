@@ -1,5 +1,6 @@
 create fname 8 allot s" .score" fname place						\ nice way to assign a file name 
 variable tobeat 									\ to know if new high score is reached
+<<<<<<< HEAD
 : COLORIZE ( n -- ) 
 	\ just like terminal ascii \e[31m, here use 31 colorize 
 \ Forth words for HIRES-mode graphics
@@ -10,17 +11,22 @@ variable tobeat 									\ to know if new high score is reached
 : scale ( scale --- ) drop ;	( sets shape table scaling value)
 \ implement home, hclr and vhtab using ANSI commands
 \ SEE: https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
+=======
+\ words
+: COLORIZE ( n -- ) 
+	\ just like terminal ascii \e[31m, here use 31 colorize 
+>>>>>>> dev
 : home ( --- ) ( set cursor to home position, using ANSI codes)
 \ real HCLR would clear HIRES1
 : hclr ( --- ) ( clear screen using ANSI codes)
-: vhtab ( y x --- ) ( position cursor on screen, using ANSI codes)
-: draw ( addr delim --- ) ( draw shape table, presumably first value is address and second is delimiter)
+: vhtab ( y x -- x y -- ) ( position cursor on screen, using ANSI codes)
 \ HELPFUL RESOURCE: https://dwheeler.com/6502/fig-forth-glossary.txt
 \ Helpful book: Forth Fundamentals Vol. 2, C. Kevin McCabe, dilithium Press 1983, ISBN 0-88056-092-4
 : MINUS negate	 ( FFv2 page 97) ;
 : -DUP ?dup	 ( FFv2 page 39) ;
 \ this woudln't be a problem on the Apple ][ but on modern systems the KEY routine is case sensitive
 : inkey ( --- key)
+\ not really needed as far as I guess noone uses versions of gforth older than 0.7.x
 : checkversion ( -- exit|continue ) 
 	\ check gforth version 
 	version-string 2 - s\" 0.7" str= 0 >= if 	\ easy method to get tooling version
@@ -28,7 +34,10 @@ variable tobeat 									\ to know if new high score is reached
 \ Read highscore from file & if needed update the file with a new highscrore 
 : readfile
 	here 'src-fd-in ! 							\ ram position
+<<<<<<< HEAD
 	\ s" gamedata/.score" r/o open-file throw fd-in !
+=======
+>>>>>>> dev
 	dup allot								\ one alloc = 1 line
 	fd-in @ close-file throw						\ now close file
 	here 'src-fd-in @ - #src-fd-in ! 					\ get allocated

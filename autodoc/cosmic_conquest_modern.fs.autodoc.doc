@@ -15,13 +15,11 @@
 : END-MSGE                  ( end of game message)
 : C$                        ( loads 8-bit value into table)
 : $                         ( loads 16-bit value into table)
-SPACEFIG                    ( load shape tables)  \ map
-\ FORGET C$  ( we don't need C$ and $ any more)
+\ this is a static map
+SPACEFIG                    ( load shape tables)  \ game map 
+\ feel free to modify the map 
 : SKETCH  ( n ---  )    ( sketch shape n at current position)
-\ this won't work on 64-bit gForth or even 32-bit!
-\ this should probably be rewritten as
-\ 2 * 0 swap spacefig + w@ spacefig + draw 
-\ note that the fetch is now unsigned 16-bit
+\ now adds galaxy
 : SET-UP-GALAXY
 : INITIALISE         ( initialise all variables and arrays)
 : DRAW-BORDERS   ( draw borders o-f display and headings)
