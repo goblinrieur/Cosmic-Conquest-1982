@@ -1,10 +1,14 @@
 ( TARGET SPECIFIC WORDS)
+\ targets might be only PC/Smartphones/TAbs now ...  so ...  feel free to use high level modern gforth words words
 27 constant ESC
+\
 create fname 8 allot s" .score" fname place						\ nice way to assign a file name 
+\
 variable #src-fd-in
 variable 'src-fd-in
 variable tobeat 									\ to know if new high score is reached
 variable fd-in
+\
 0 value fid1
 \ words
 : COLORIZE ( n -- ) 
@@ -13,11 +17,11 @@ variable fd-in
 	0 <# #S #> type 
 	R> base ! ." m"  
 ; 
-: home ( --- ) ( set cursor to home position, using ANSI codes)
+: home ( -- ) ( set cursor to home position, using ANSI codes)
 	.\" \e[H" 
 ;
 \ real HCLR would clear HIRES1
-: hclr ( --- ) ( clear screen using ANSI codes)
+: hclr ( -- ) ( clear screen using ANSI codes)
 	page
 ;
 \
@@ -30,15 +34,15 @@ variable fd-in
 : MINUS negate	 ( FFv2 page 97) ;
 : -DUP ?dup	 ( FFv2 page 39) ;
 \ this woudln't be a problem on the Apple ][ but on modern systems the KEY routine is case sensitive
-: inkey ( --- key)
-   key dup dup
-   96 >
-      if ( ASCII value 'a' or higher)
-         123 <
-            if ( ASCII value 'z' or lower)
-               223 and ( mask off upper/lower case bit)
-            endif
-     endif
+: inkey ( -- key)
+	key dup dup
+	96 >
+	if ( ASCII value 'a' or higher)
+		123 <
+		if ( ASCII value 'z' or lower)
+			223 and ( mask off upper/lower case bit)
+		endif
+	endif
 ;    
 \ not really needed as far as I guess noone uses versions of gforth older than 0.7.x
 : checkversion ( -- exit|continue ) 
