@@ -55,7 +55,7 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 
 : CLEAR-MSGE                 ( clear message area on text screen)
    18 10 DO
-           I 0 VHTAB 35 SPACES
+           I 0 vhtab 35 SPACES
          LOOP 
 ;
 
@@ -114,7 +114,7 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 ;
 
 : END-MSGE                  ( end of game message)
-   12 0 VHTAB ." END OF GAME COMMANDER" 
+   12 0 vhtab ." END OF GAME COMMANDER" 
 ;
 
 ( graphics shapes and utilities)
@@ -177,6 +177,7 @@ DECIMAL DROP
 : INITIALISE         ( initialise all variables and arrays)
    CR CR
    BEGIN
+      32 colorize
       ." WHAT LEVEL OF DIFFICULTY (1-4) " INPUT DUP
       5 < IF  ( correct response) 1
           ELSE ( incorrect response) DROP CR 0
@@ -227,33 +228,33 @@ DECIMAL DROP
    HOME
    32 colorize
    ." PLAYER"
-   2  0  VHTAB ." PLANETS ="
-   4  0  VHTAB ." EMPIRE"
-   6  0  VHTAB ." FLEETS"
-   6  21 VHTAB ." PLANETS"
-   20 0  VHTAB ." X="
-   20 7  VHTAB ." Y="
-   21 0  VHTAB ." NO. OF SHIPS ="
-   22 0  VHTAB ." LEGIONS ="
-   20 25 VHTAB ." SCORE ="
-   22 21 VHTAB ." CREDITS" 
+   2  0  vhtab ." PLANETS = "
+   4  0  vhtab ." EMPIRE "
+   6  0  vhtab ." FLEETS "
+   6  21 vhtab ." PLANETS "
+   20 0  vhtab ." X= "
+   20 7  vhtab ." Y= "
+   21 0  vhtab ." NO. OF SHIPS = "
+   22 0  vhtab ." LEGIONS = "
+   20 25 vhtab ." SCORE = "
+   22 21 vhtab ." CREDITS " 
    33 colorize
 ;
 
 : FIND-DIRECTION     (  --- X Y )
                      ( find out which square player means)
    32 colorize
-   23 0 VHTAB ." WHICH DIRECTION?" 
+   23 0 vhtab ." WHICH DIRECTION?" 
    33 colorize
    2 SPACES inkey 127 AND
    CASE
-      87 ( up)    OF -1  0 ENDOF
-      90 ( down)  OF  1  0 ENDOF
-      83 ( right) OF  0  1 ENDOF
-      65 ( left)  OF  0 -1 ENDOF
+      73 ( up)    OF -1  0 ENDOF 
+      75 ( down)  OF  1  0 ENDOF
+      76 ( right) OF  0  1 ENDOF
+      74 ( left)  OF  0 -1 ENDOF
                       0  0
-   ENDCASE
-   23 0 VHTAB 35 SPACES   ( clear message )
+   ENDCASE ( vim ijkl mode )
+   23 0 vhtab 35 SPACES   ( clear message )
    2 F C@ + EDGE-CHECK SWAP
    1 F C@ + EDGE-CHECK SWAP 
 ;
@@ -309,18 +310,18 @@ DECIMAL DROP
 ;
 
 : DRAW-FIGURES    ( draw the totals in the disp1ay)
-	2 10 VHTAB PLANETS @ 5 .R
-	20 33 VHTAB PLANETS @ C-PLANETS @ - W1 *
+	2 10 vhtab PLANETS @ 5 .R
+	20 33 vhtab PLANETS @ C-PLANETS @ - W1 *
 	1 3 FLEETS w@ 2 3 FLEETS w@ + W2 * +
 	1 5 FLEETS w@ 2 5 FLEETS w@ + W2 * +
 	TROOPS @ W3 * - 6 .R
-	6 8   VHTAB C-FLEETS @ 5 .R
-	6 29  VHTAB C-PLANETS @ 5 .R
-	20 2  VHTAB 2 F C@ 2 .R
-	20 9  VHTAB 1 F C@ 2 .R
-	21 15 VHTAB 3 F w@ 4 .R
-	22 10 VHTAB 5 F w@ 6 .R
-	22 31 VHTAB CREDIT @ 6 .R 
+	6 8   vhtab C-FLEETS @ 5 .R
+	6 29  vhtab C-PLANETS @ 5 .R
+	20 2  vhtab 2 F C@ 2 .R
+	20 9  vhtab 1 F C@ 2 .R
+	21 15 vhtab 3 F w@ 4 .R
+	22 10 vhtab 5 F w@ 6 .R
+	22 31 vhtab CREDIT @ 6 .R 
 ;
 
 : DRAW-DISPLAY
@@ -344,14 +345,15 @@ DECIMAL DROP
 ;
 
 : CHECK-POSITION  ( X Y --- )
+	33 colorize
 	( check if move to position X Y is possib
 	( and take apropriate action)
    EDGE-CHECK SWAP EDGE-CHECK SWAP 2DUP GALAXY C@
    CASE
       0 ( space)      OF MOVE-FLEET ENDOF
-      8 ( black hole) OF 23 0 VHTAB ." FLEET IN BLACK HOLE"
+      8 ( black hole) OF 23 0 vhtab ." FLEET IN BLACK HOLE"
                          MOVE-FLEET DELAY NEW-FLEET
-                         23 0 VHTAB 35 SPACES ENDOF
+                         23 0 vhtab 35 SPACES ENDOF
       DROP DROP
    ENDCASE
    DRAW-DISPLAY 
@@ -382,54 +384,58 @@ DECIMAL DROP
 ;
 
 : ENLIST    ( enlisting 1egions on a planet)
+   33 colorize
    BUY-V @ 0=
    IF  ( it's ok to buy)
        5 BUY-V !  ( can't buy for 5 more moves)
        ( calculate cost of legions)
        RANDOM1 8 / XY@ INFO1 C@ 7 / + DUP TEMP1 !
-       10 0 VHTAB ." COST PER LEGION =" 3 .R
+       10 0 vhtab ." COST PER LEGION =" 3 .R
        ( calculate no. of legions available)
        XY@ INFO1 C@ 6 / DUP LEG !
-       12 0 VHTAB ." NO OF LEGIONS AVAILABLE = " 3 .R
+       12 0 vhtab ." NO OF LEGIONS AVAILABLE = " 3 .R
        ( take the order)
-       14 0 VHTAB ." HOW MANY DO YOU REQUIRE?" INPUT
+       14 0 vhtab ." HOW MANY DO YOU REQUIRE? " INPUT
        LEG @ MIN DUP TEMP1 @ * CREDIT @ >
        IF  ( not enough money)
-         16 0 VHTAB ." NOT ENOUGH CREDIT"
+         16 0 vhtab ." NOT ENOUGH CREDIT"
        ELSE
          5 F w@ OVER + 5 F w!  ( update legions)
          TEMP1 @ * CREDIT @ SWAP - CREDIT ! ( update credit)
        ENDIF
    ELSE
-      10 0 VHTAB ." NO TROOPS AVAILABLE"
+      10 0 vhtab ." NO TROOPS AVAILABLE"
    ENDIF 
 ;
 
 : BUY    ( purchasing of ships at planet)
+	33 colorize
    BUY-V @ 0=
    IF    ( it's ok to buy)
       5 BUY-V !               ( stop continous buying)
       RANDOM1 5 / XY@ INFO1 C@ 10 / + 1+ DUP TEMP1 !
-      10 0 VHTAB ." COST PER SHIP = " 2 .R
-      12 0 VHTAB ." HOW MANY DO YOU WANT?" INPUT
+      10 0 vhtab ." COST PER SHIP = " 2 .R
+      12 0 vhtab ." HOW MANY DO YOU WANT?" INPUT
       CREDIT @ TEMP1 @ / MIN    ( no more than he can afford)
       DUP 3 F w@ + 3 F w!       ( update ships in fleet)
       TEMP1 @ * CREDIT @ SWAP - CREDIT !  ( update credit)
       16 1 F C@ 2 F C@ GALAXY C!  ( make sure fleet symbol there)
    ELSE
-      10 0 VHTAB ." NO SHIPS AVAILABLE"
+      10 0 vhtab ." NO SHIPS AVAILABLE"
    ENDIF 
 ;
 
 : GATHER   ( pick up legions from garrison onto fleet)
-   10 0 VHTAB ." HOW MANY DO YOU WISH TO TAKE?" INPUT
+	33 colorize
+   10 0 vhtab ." HOW MANY DO YOU WISH TO TAKE? " INPUT
    XY@ INFO2 C@ MIN TEMP1 !  ( no more than are there)
    5 F w@ TEMP1 @ + 5 F w!     ( update legions on fleet)
    XY@ INFO2 C@ TEMP1 @ - XY@ INFO2 C! ; ( update on planet)
 
 \ Orignal name: "LEAVE"
 : DEPLOY   ( leave legions from fleet on planet as garrison)
-   10 0 VHTAB ." HOW MANY DO YOU WISH TO LEAVE?" INPUT
+	33 colorize
+   10 0 vhtab ." HOW MANY DO YOU WISH TO LEAVE? " INPUT
    5 F w@ MIN TEMP1 !         ( no more than you have)
    5 F w@ TEMP1 @ - 5 F w!     ( update legions on fleet)
    XY@ INFO2 C@ TEMP1 @ + 255 MIN ( no more than 255)
@@ -437,12 +443,12 @@ DECIMAL DROP
 
 : FRIENDLY-PLANET   ( options upon landing at colony)
    BEGIN
-      32 colorize
-      10 0 VHTAB ." CLASS " XY@ INFO1 C@ 8 / 2 .R
+      33 colorize
+      10 0 vhtab ." CLASS " XY@ INFO1 C@ 8 / 2 .R
       ."  PLANET" 16 SPACES CR  ( give class of planet)
       ." LOCAL GARRISON IS " XY@ INFO2 C@ 3 .R ."  LEGIONS"
                                 ( give size of local garrison)
-      12 0 VHTAB ." DO YOU WISH TO:" 12 SPACES ( give options)
+      12 0 vhtab ." DO YOU WISH TO:" 12 SPACES ( give options)
       CR ." 1.  LEAVE LEGIONS ON PLANET"
       CR ." 2.  GATHER LEGIONS FROM PLANET"
       CR ." 3.  BUY SHIPS"
@@ -468,13 +474,13 @@ DECIMAL DROP
    ( calaculate relative strength of planet)
    5 F w@ >
    IF   ( planet drives off your forces)
-      10 0 VHTAB ." YOUR FORCES RETREAT"
-      12 0 VHTAB ." YOUR LOSSES = "
+      10 0 vhtab ." YOUR FORCES RETREAT"
+      12 0 vhtab ." YOUR LOSSES = "
       5 F w@ 2 / DUP 3 .R 5 F w@ SWAP - 5 F w!
       DELAY DELAY
    ELSE ( you capture planet)
-      10 0 VHTAB ." PLANET CAPTURED"
-      12 0 VHTAB ." YOUR LOSSES = "
+      10 0 vhtab ." PLANET CAPTURED"
+      12 0 vhtab ." YOUR LOSSES = "
       TEMP1 @ 3 .R
       5 F w@ TEMP1 @ - 5 F w!   ( update legions in fleet)
       1 PLANETS +!            ( increment no. of planets)
@@ -486,9 +492,9 @@ DECIMAL DROP
 
 : EMPTY-PLANET   ( in orbit round uncolonised planet)
    CLEAR-MSGE
-   10 0 VHTAB ." UNCOLONISED CLASS " XY@ INFO1 C@ 8 / 2 .R
+   10 0 vhtab ." UNCOLONISED CLASS " XY@ INFO1 C@ 8 / 2 .R
    ." PLANET"
-   12 0 VHTAB ." DO YOU WISH TO ATTACK?" inkey 127 AND 89 =
+   12 0 vhtab ." DO YOU WISH TO ATTACK? " inkey 127 AND 89 =
    IF
       COLONISE
    ENDIF
@@ -496,7 +502,7 @@ DECIMAL DROP
 ;
 
 : NOT-PLANET   ( there isn't a planet where he's trying to land)
-   10 0 VHTAB ." NO PLANET THERE"
+   10 0 vhtab ." NO PLANET THERE"
    DELAY CLEAR-MSGE 
 ;
 
@@ -506,15 +512,15 @@ DECIMAL DROP
                ( calaculate enemy garrlsons effective strength)
    5 F w@ >
    IF   ( enemy garrison wins)
-      10 0 VHTAB ." YOUR FORCES RETREAT"
-      12 0 VHTAB ." YOUR LOSSES = "
+      10 0 vhtab ." YOUR FORCES RETREAT"
+      12 0 vhtab ." YOUR LOSSES = "
       XY@ INFO2 C@ 5 F w@ * TEMP1 @ / 2 / XY@ INFO2 C@ SWAP
       - XY@ INFO2 C!
       5 F w@ 2 / DUP 3 .R 5 F w@ SWAP - 5 F w!
    ELSE
       0 XY@ INFO2 C!           ( reduce legions on planet to 0)
-      10 0 VHTAB ." PLANET CAPTURED"
-      12 0 VHTAB ." YOUR LOSSES = "
+      10 0 vhtab ." PLANET CAPTURED"
+      12 0 vhtab ." YOUR LOSSES = "
       TEMP1 @ 3 .R
       5 F w@ TEMP1 @ - 5 F w!    ( update legions with fleet)
       132 XY@ GALAXY C!        ( put colony in galaxy)
@@ -529,10 +535,10 @@ DECIMAL DROP
 
 : ENEMY-PLANET   ( player orbits enemy planet)
    XY@ INFO1 C@ 8 /
-   10 0 VHTAB ." CLASS " 2 .R ."  PLANET" CR CR
+   10 0 vhtab ." CLASS " 2 .R ."  PLANET" CR CR
    ." ENEMY GARRISON OF STRENGTH "
    XY@ INFO2 C@ 3 .R CR CR
-   ." DO YOU WISH TO ATTACK?" inkey 127 AND 89 =
+   ." DO YOU WISH TO ATTACK? " inkey 127 AND 89 =
    IF
       ATTACK
    ENDIF
@@ -551,7 +557,7 @@ DECIMAL DROP
 ;
 
 : REVOLT? ( planet at X,Y revolts)
-   12 0 VHTAB ." PLANET AT " Y @ . X @ . ." REVOLTS" DELAY
+   12 0 vhtab ." PLANET AT " Y @ . X @ . ." REVOLTS" DELAY
    XY@ INFO1 C@ 8 / XY@ INFO2 C@ 2DUP >
    IF   ( revolt succeeds)
       DROP 4 XY@ GALAXY C!            ( place planet symbol)
@@ -559,27 +565,27 @@ DECIMAL DROP
       0 XY@ INFO2 C!                  ( set lpgions to 0)
       -1 PLANETS +!                   ( reduce no.of planets )
       7 EMIT                          ( ring bell)
-      14 0 VHTAB ." SUCCEEDS"
+      14 0 vhtab ." SUCCEEDS"
    ELSE ( revolt fails)
       SWAP 2 / - XY@ INFO2 C!         ( reduce legions)
       XY@ INFO1 C@ 7 OR XY@ INFO1 C!  ( set revolt factor 7)
-      14 0 VHTAB ." FAILS"
+      14 0 vhtab ." FAILS"
    ENDIF
    DELAY
-   12 0 VHTAB 30 SPACES
-   14 0 VHTAB 12 SPACES ;             ( clear messages)
+   12 0 vhtab 30 SPACES
+   14 0 vhtab 12 SPACES ;             ( clear messages)
 
 : TAX     ( collect taxes on players planets)
    0 VTAX !                           ( set tax to 0)
-   10 0 VHTAB ." TAX COLLECTED ="
-   10 17 VHTAB 0 .
+   10 0 vhtab ." TAX COLLECTED = "
+   10 17 vhtab 0 .
    SIZE 1+ 1 DO
      SIZE 1+ 1 DO
                  I J GALAXY C@ 132 =
                  IF   ( it's a colony)
                     I J INFO1 C@ 3 * 5 / ( tax from planet)
                     VTAX @ + DUP VTAX !  ( update tax)
-                    10 17 VHTAB 5 .R
+                    10 17 vhtab 5 .R
                     I J INFO1 C@ 7 AND -DUP
                     IF ( doesn't revolt)
                        I J INFO1 DUP C@ 1 - SWAP C!
@@ -649,11 +655,12 @@ DECIMAL DROP
    LOOP
    X @ 0=
    IF
-      10 0 VHTAB ." NO ENEMY FLEET IN RANGE"
+	
+      10 0 vhtab ." NO ENEMY FLEET IN RANGE"
    ELSE
       3 F w@ XY@ INFO2 C@ OVER 4 * 10 /
       OVER 4 * 10 / DUP
-      10 0 VHTAB ." FLEET HIT BY " 5 .R ." UNITS"
+      10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS"
       ROT ROT - 0 MAX DUP 0=
       IF ( computers fleet destroyed)
       DROP TROOPS @ XY@ INFO2 C@ - TROOPS !
