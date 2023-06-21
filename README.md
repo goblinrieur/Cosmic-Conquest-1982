@@ -6,12 +6,12 @@ A copy of it is still in local [Original](./Original/) directory too. See [Origi
 
 # Forked version 
 ```
-        ___   ___   ____  
-__   __/ _ \ / _ \ |___ \ 
-\ \ / / | | | | | |  __) |
- \ V /| |_| | |_| | / __/ 
-  \_/  \___(_)___(_)_____|
-                          
+        ___   _   ____  
+__   __/ _ \ / | |___ \ 
+\ \ / / | | || |   __) |
+ \ V /| |_| || |_ / __/ 
+  \_/  \___(_)_(_)_____|
+                        
 ```
 
 ![2.png](./gamedata/2.png)
