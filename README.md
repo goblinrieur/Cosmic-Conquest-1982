@@ -18,11 +18,11 @@ __   __/ _ \ / _ \ |___ \
 
 # Why forking ?
 
-Project seems abandoned since about 2 years now.
+Project seems abandoned since about 2 years now. Forked on Wed Jun 21
 
 - [ ] Modernize all the code & remove some useless words that are no more needed here
-- [ ] code documentation is currently so bad...
-- [ ] there are no score file generated
+- [X] code documentation is currently so bad...
+- [X] there are no score file generated
 - [ ] will try to do some improvement too
 - [X] games is not starting automatically on load 
 - [X] key map is not pleasant to me 
