@@ -6,12 +6,12 @@ A copy of it is still in local [Original](./Original/) directory too. See [Origi
 
 # Forked version 
 ```
-        ___   ___   ___  
-__   __/ _ \ / _ \ / _ \ 
-\ \ / / | | | | | | | | |
- \ V /| |_| | |_| | |_| |
-  \_/  \___(_)___(_)___/ 
-                         
+        ___   ___   _ 
+__   __/ _ \ / _ \ / |
+\ \ / / | | | | | || |
+ \ V /| |_| | |_| || |
+  \_/  \___(_)___(_)_|
+                      
 ```
 
 Branch dev Oppened Wed Jun 21 11:17:27 AM CEST 2023
@@ -20,18 +20,18 @@ Branch dev Oppened Wed Jun 21 11:17:27 AM CEST 2023
 
 Project seems abandoned since about 2 years now.
 
+- [ ] Modernize all the code & remove some useless words that are no more needed here
 - [ ] code documentation is currently so bad...
-- [ ] games is not starting automatically on load 
-- [ ] key map is not pleasant to me 
-- [ ] missing a quit in game to go back to system 
-- [ ] there are no colors 
 - [ ] there are no score file generated
-- [ ] why is there 2 key press needed on start 
 - [ ] will try to do some improvement too
-- [ ] and many things not yet discovered
-- [ ] no gforth version checking 
-- [ ] will include original magazine notes too 
+- [X] games is not starting automatically on load 
+- [X] key map is not pleasant to me 
 - [X] missing LICENSE file as there was originally no file the [unlicensed](./LICENSE) is the one to use.
+- [X] missing a quit in game to go back to system 
+- [X] no gforth version checking 
+- [X] there are no colors 
+- [X] why is there 2 key press needed on start 
+- [X] will include original magazine notes too 
 
 # References
 
@@ -62,12 +62,12 @@ When you open the game, you will be prompted to press "any key" twice. This is u
 
 Key controls:
 
- * `W`, `Z`, `A`, `S` - Directional controls
+ * `J`, `L`, `I`, `k` - Directional controls - standard VIM mode :) 
  * `T` - **T**ax your planets
- * `L` - **L**and on a planet
- * `I` - **I**nformation
+ * `G` - **L**and on a planet - Ground
+ * `R` - **I**nformation - Radar
  * `F` - **F**ire / attack enemy
- * `O` - Switch to **O**ther fleet
+ * `C` - Switch to **O**ther fleet - Change 
 
 [Full instructions are available in the original magazine article.](https://archive.org/details/byte-magazine-1982-12/page/n125/mode/2up)
 
