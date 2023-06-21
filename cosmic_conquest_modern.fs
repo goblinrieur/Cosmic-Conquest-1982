@@ -690,30 +690,26 @@ DECIMAL DROP
 
 HEX
 
-
 : OBEY-COMMAND
    BUY-V @ -DUP ( fetch BUY-V, duplicate if nonzero)
    IF ( nonzero)
       1 - BUY-V !
    ENDIF
-
    inkey
    CASE
-      ( A) 41 OF MOVE-LEFT   ENDOF
-      ( S) 53 OF MOVE-RIGHT  ENDOF
-      ( W) 57 OF MOVE-UP     ENDOF
-      ( Z) 5A OF MOVE-DOWN   ENDOF
-      ( O) 4F OF OTHER-FLEET ENDOF
-      ( I) 49 OF INFORMATION ENDOF
-      ( L) 4C OF LAND        ENDOF
+      ( J) 4A OF MOVE-LEFT   ENDOF
+      ( L) 4C OF MOVE-RIGHT  ENDOF
+      ( I) 49 OF MOVE-UP     ENDOF
+      ( k) 4B OF MOVE-DOWN   ENDOF
+      ( C) 43 OF OTHER-FLEET ENDOF
+      ( R) 52 OF INFORMATION ENDOF
+      ( G) 47 OF LAND        ENDOF
       ( T) 54 OF TAX         ENDOF
       ( F) 46 OF FIRE        ENDOF
       ( Q) 51 OF exitprog    ENDOF
       ( q) 71 OF exitprog    ENDOF
    ENDCASE
-
    \ 24 0 vhtab .s ( print current state of stack )
-
    \ not sure why sp! is required here and it appears to be syntactically different from gForth
    \ this should reset the parameter stack, are there values ever left lying around?
    \ SP! 
