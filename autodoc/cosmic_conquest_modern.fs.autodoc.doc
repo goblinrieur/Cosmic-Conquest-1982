@@ -56,26 +56,27 @@ SPACEFIG                    ( load shape tables)  \ map
 : DEPLOY   ( leave legions from fleet on planet as garrison)
 : FRIENDLY-PLANET   ( options upon landing at colony)
 : COLONISE ( attack an uncolonised planet)
-      200 start +! 		\ capture planets increases score now
+      200 score +! 		\ capture planets increases score now
 : EMPTY-PLANET   ( in orbit round uncolonised planet)
 : NOT-PLANET   ( there isn't a planet where he's trying to land)
 : ATTACK       ( attack a planet controlled by the computer)
-	500 start +! 		\ increase score then ! 
+	500 score +! 		\ increase score then ! 
 : ENEMY-PLANET   ( player orbits enemy planet)
 : LAND   ( land on adjacent planet)
 : REVOLT? ( planet at X,Y revolts)
-	-1000 start +! 			\ loosing planet makes a score crash ! 
+	-1000 score +! 			\ loosing planet makes a score crash ! 
 : TAX     ( collect taxes on players planets)
-			VTAX @ start +! \ add tax on score ! 
+			VTAX @ score +! \ add tax on score ! 
 : COMPUTER-TURN   ( computers turn to do something)
 : FIRE     ( players fleet attacks computer fleet)
-      10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 1 + start ! \ add 1 to score on combat
-      start @ 4 + start ! \ add 5 to score on winning a fight
+      10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 100 + start ! \ add 1 to score on combat
+      start @ 400 + start ! \ add 5 to score on winning a fight
 : exitprog ( -- ) 
 	\ quit properly program
+	highscore?		\ write highscore if possble (if player made it)
+	page			\ clearscreen
 	0 colorize		\ restore colors
 	s" tput cnorm" system 	\ restore cursor
-	page			\ clearscreen
 : OBEY-COMMAND
    \ 24 0 vhtab .s ( print current state of stack )
    \ not sure why sp! is required here and it appears to be syntactically different from gForth
