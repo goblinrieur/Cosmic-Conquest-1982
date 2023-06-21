@@ -30,9 +30,6 @@
    ." ;"
    0 <# #s #> type ." H" ;
 
-: h1 ( --- ) ; ( selects HIRES mode 1, without clearing screen)
-: text ( --- ) ( selects TEXT screen leaving HIRES1 unchanged) ;
-
 : draw ( addr delim --- ) ( draw shape table, presumably first value is address and second is delimiter)
    drop drop ; ( discard values from stack)
 
