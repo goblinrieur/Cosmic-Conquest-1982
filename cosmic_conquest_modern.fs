@@ -31,6 +31,8 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 0 VARIABLE VTAX         ( tax collected)
 0 VARIABLE X            ( temporary storage for X position)
 0 VARIABLE Y            ( temporary storage for Y position)
+0 VARIABLE score
+0 VARIABLE Tcount
 250 VARIABLE CREDIT     ( players credit in taxes)
 
 ( TARGET SPECIFIC WORDS)
@@ -311,7 +313,7 @@ DECIMAL DROP
 
 : DRAW-FIGURES    ( draw the totals in the disp1ay)
 	2 10 vhtab PLANETS @ 5 .R
-	20 33 vhtab PLANETS @ C-PLANETS @ - W1 *
+	20 33 vhtab score @ 
 	1 3 FLEETS w@ 2 3 FLEETS w@ + W2 * +
 	1 5 FLEETS w@ 2 5 FLEETS w@ + W2 * +
 	TROOPS @ W3 * - 6 .R
@@ -368,22 +370,27 @@ DECIMAL DROP
 ;
 
 : MOVE-LEFT
+	1 tcount +!
    1 F C@ 2 F C@ 1 - CHECK-POSITION 
 ;
 
 : MOVE-RIGHT
+	1 tcount +!
    1 F C@ 2 F C@ 1+ CHECK-POSITION 
 ;
 
 : MOVE-DOWN
+	1 tcount +!
    1 F C@ 1+ 2 F C@ CHECK-POSITION 
 ;
 
 : MOVE-UP
+	1 tcount +!
    1 F C@ 1 - 2 F C@ CHECK-POSITION 
 ;
 
 : ENLIST    ( enlisting 1egions on a planet)
+	1 tcount +!
    33 colorize
    BUY-V @ 0=
    IF  ( it's ok to buy)
@@ -409,6 +416,7 @@ DECIMAL DROP
 ;
 
 : BUY    ( purchasing of ships at planet)
+	1 tcount +!
 	33 colorize
    BUY-V @ 0=
    IF    ( it's ok to buy)
@@ -426,6 +434,7 @@ DECIMAL DROP
 ;
 
 : GATHER   ( pick up legions from garrison onto fleet)
+	1 tcount +!
 	33 colorize
    10 0 vhtab ." HOW MANY DO YOU WISH TO TAKE? " INPUT
    XY@ INFO2 C@ MIN TEMP1 !  ( no more than are there)
@@ -434,6 +443,7 @@ DECIMAL DROP
 
 \ Orignal name: "LEAVE"
 : DEPLOY   ( leave legions from fleet on planet as garrison)
+	1 tcount +!
 	33 colorize
    10 0 vhtab ." HOW MANY DO YOU WISH TO LEAVE? " INPUT
    5 F w@ MIN TEMP1 !         ( no more than you have)
@@ -442,6 +452,7 @@ DECIMAL DROP
    XY@ INFO2 C! ;            ( update on planet)
 
 : FRIENDLY-PLANET   ( options upon landing at colony)
+	1 tcount +!
    BEGIN
       33 colorize
       10 0 vhtab ." CLASS " XY@ INFO1 C@ 8 / 2 .R
@@ -469,6 +480,7 @@ DECIMAL DROP
 ;
 
 : COLONISE ( attack an uncolonised planet)
+	1 tcount +!
    CLEAR-MSGE
    XY@ INFO1 C@ 8 / RANDOM1 1 - 5 / 7 + * 10 / DUP TEMP1 !
    ( calaculate relative strength of planet)
@@ -484,7 +496,7 @@ DECIMAL DROP
       TEMP1 @ 3 .R
       5 F w@ TEMP1 @ - 5 F w!   ( update legions in fleet)
       1 PLANETS +!            ( increment no. of planets)
-      200 start +! 		\ capture planets increases score now
+      200 score +! 		\ capture planets increases score now
       132 XY@ GALAXY C!       ( colony symbol in galaxy)
       DELAY DELAY
       FRIENDLY-PLANET
@@ -492,6 +504,7 @@ DECIMAL DROP
 ;
 
 : EMPTY-PLANET   ( in orbit round uncolonised planet)
+	1 tcount +!
    CLEAR-MSGE
    10 0 vhtab ." UNCOLONISED CLASS " XY@ INFO1 C@ 8 / 2 .R
    ." PLANET"
@@ -508,6 +521,7 @@ DECIMAL DROP
 ;
 
 : ATTACK       ( attack a planet controlled by the computer)
+	1 tcount +!
    CLEAR-MSGE
    XY@ INFO2 C@ RANDOM1 1 - 5 / 7 + * 10 / DUP TEMP1 !
                ( calaculate enemy garrlsons effective strength)
@@ -526,7 +540,7 @@ DECIMAL DROP
       5 F w@ TEMP1 @ - 5 F w!    ( update legions with fleet)
       132 XY@ GALAXY C!        ( put colony in galaxy)
       1 PLANETS +!             ( increment planets)
-	500 start +! 		\ increase score then ! 
+	500 score +! 		\ increase score then ! 
       -1 C-PLANETS +!          ( decrement computer planets)
       XY@ INFO1 C@ 8 / MINUS CLASS-TOTALS +!
       DELAY                   ( reduce classes of compo plnts)
@@ -548,6 +562,7 @@ DECIMAL DROP
 ;
 
 : LAND   ( land on adjacent planet)
+	1 tcount +!
    FIND-DIRECTION
    2DUP Y ! X ! GALAXY C@
    CASE
@@ -566,7 +581,7 @@ DECIMAL DROP
       8 * 7 + XY@ INFO1 C!            ( set revolt factor 7)
       0 XY@ INFO2 C!                  ( set lpgions to 0)
       -1 PLANETS +!                   ( reduce no.of planets )
-	-1000 start +! 			\ loosing planet makes a score crash ! 
+	-1000 score +! 			\ loosing planet makes a score crash ! 
       14 0 vhtab ." SUCCEEDS"
    ELSE ( revolt fails)
       SWAP 2 / - XY@ INFO2 C!         ( reduce legions)
@@ -578,6 +593,7 @@ DECIMAL DROP
    14 0 vhtab 12 SPACES ;             ( clear messages)
 
 : TAX     ( collect taxes on players planets)
+	1 tcount +!
    0 VTAX !                           ( set tax to 0)
    10 0 vhtab ." TAX COLLECTED = "
    10 17 vhtab 0 .
@@ -587,7 +603,7 @@ DECIMAL DROP
                  IF   ( it's a colony)
                     I J INFO1 C@ 3 * 5 / ( tax from planet)
                     VTAX @ + DUP VTAX !  ( update tax)
-			VTAX @ start +! \ add tax on score ! 
+			VTAX @ score +! \ add tax on score ! 
                     10 17 vhtab 5 .R
                     I J INFO1 C@ 7 AND -DUP
                     IF ( doesn't revolt)
@@ -646,6 +662,7 @@ DECIMAL DROP
 ;
 
 : FIRE     ( players fleet attacks computer fleet)
+	1 tcount +!
    0 X !
    2 F C@ 2 + DUP 3 - DO
       1 F C@ 2 + DUP 3 - DO
@@ -661,11 +678,11 @@ DECIMAL DROP
    ELSE
       3 F w@ XY@ INFO2 C@ OVER 4 * 10 /
       OVER 4 * 10 / DUP
-      10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 1 + start ! \ add 1 to score on combat
+      10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 100 + start ! \ add 1 to score on combat
       ROT ROT - 0 MAX DUP 0=
       IF ( computers fleet destroyed)
       DROP TROOPS @ XY@ INFO2 C@ - TROOPS !
-      start @ 4 + start ! \ add 5 to score on winning a fight
+      start @ 400 + start ! \ add 5 to score on winning a fight
       ( reduce computers troops)
       0 XY@ GALAXY C!          ( destroy fleet symbol)
          -1 C-FLEETS +!        ( reduce comps fleets)
@@ -686,9 +703,12 @@ DECIMAL DROP
 
 : exitprog ( -- ) 
 	\ quit properly program
+	PLANETS @ C-PLANETS @ - W1 * abs score ! 
+	highscore?		\ write highscore if possble (if player made it)
+	page			\ clearscreen
+	cr ." Your final score was : " score @ . cr
 	0 colorize		\ restore colors
 	s" tput cnorm" system 	\ restore cursor
-	page			\ clearscreen
 	bye
 ;
 
@@ -723,6 +743,7 @@ HEX
 decimal
 
 : COMPUTER?    ( is it the computers turn or not)
+	1 tcount +!
    COMPUTER @ 1 - DUP 0=
    IF
       COMP-START @ COMPUTER ! DROP 1
@@ -735,9 +756,11 @@ decimal
 	\ other conditions to end the game
 	start @ -5000 <= if 31 colorize ." Critical score : Game ENDED ! " key exitprog then 
 	LEN @ 0 <= if 31 colorize ." to much moves : Game ENDED ! " key exitprog then 
+	tcount @ 35000000 >= if 31 colorize ." You played to much : Game ENDED ! " key exitprog then 
 ;
 
 : RESTART        ( restarts the stopped game)
+	1 tcount +!
    rnd
    CLEAR-DISP
    HOME DRAW-BORDERS DRAW-DISPLAY
@@ -765,6 +788,7 @@ decimal
 ;
 
 : CONQUEST  ( the main game word)
+	1 tcount +!
    checkversion 
    page	\ clear screen
    31 colorize
