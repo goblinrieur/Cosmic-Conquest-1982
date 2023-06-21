@@ -27,8 +27,8 @@ Project seems abandoned since about 2 years now.
 - [ ] why is there 2 key press needed on start 
 - [ ] will try to do some improvement too
 - [ ] and many things not yet discovered
-- [ ] no gforth version checking 
-- [ ] will include original magazine notes too 
+- [ ] no gforth version checking 
+- [ ] will include original magazine notes too 
 - [X] missing LICENSE file as there was originally no file the [unlicensed](./LICENSE) is the one to use.
 
 # References
