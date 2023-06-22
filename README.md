@@ -24,7 +24,6 @@ Project seems abandoned since about 2 years now. Forked on Wed Jun 21
 - [X] code documentation is currently so bad...
 - [X] there are no score file generated
 - [ ] will try to do some improvement too
-- [X] give a Dockerfile to build it as a container if prefered [how to](./Dockerfile.md)
 - [X] games is not starting automatically on load 
 - [X] key map is not pleasant to me 
 - [X] missing LICENSE file as there was originally no file the [unlicensed](./LICENSE) is the one to use.
