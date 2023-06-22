@@ -67,6 +67,8 @@ Just run
 ./go.sh
 ``` 
 
+[VIDEO](https://www.youtube.com/watch?v=btgiQU_NxUk) _in french so use youtube translator if needed_
+
 Key controls:
 
  * `J`, `L`, `I`, `k` - Directional controls - standard VIM mode :) 
