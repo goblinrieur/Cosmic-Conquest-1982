@@ -24,6 +24,7 @@ Project seems abandoned since about 2 years now. Forked on Wed Jun 21
 - [X] code documentation is currently so bad...
 - [X] there are no score file generated
 - [ ] will try to do some improvement too
+- [X] give a Dockerfile to build it as a container if prefered [how to](./Dockerfile.md)
 - [X] games is not starting automatically on load 
 - [X] key map is not pleasant to me 
 - [X] missing LICENSE file as there was originally no file the [unlicensed](./LICENSE) is the one to use.
@@ -61,6 +62,11 @@ Attempts at emulation have not gone well because we cannot determine the exact F
 **COMMANDS ARE CASE SENSITIVE.** In the original Apple II, this did not matter. On modern systems, it does. Keep that in mind as you enter commands.
 
 When you open the game, you will be prompted to press "any key" twice. This is used for generation of a random seed and will affect the structure of the game's universe.
+
+Just run 
+```
+./go.sh
+``` 
 
 Key controls:
 
