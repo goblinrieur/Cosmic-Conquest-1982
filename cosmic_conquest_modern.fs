@@ -8,7 +8,6 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 10 CONSTANT W3                      ( weight assigned to computers troops)
 20000 CONSTANT SPEED                ( how quickly computer moves)
 250 constant delayms 		    ( milliseconds to wait for in DELAY) \ accelerate by 4
-
 ( VARIABLES)
 0 VARIABLE BUY-V        ( count to stop player buying every move)
 0 VARIABLE C-FLEETS     ( no. of computer fleets)
@@ -34,7 +33,6 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 0 VARIABLE Y            ( temporary storage for Y position)
 0 VARIABLE score
 250 VARIABLE CREDIT     ( players credit in taxes)
-
 ( TARGET SPECIFIC WORDS)
 needs modernise.fs
 require random.fs
@@ -44,7 +42,6 @@ require random.fs
 	CREATE DUP C, * ALLOT DOES>
 	ROT 1 - OVER C@ * + + 
 ;
-
 SIZE SIZE ARRAY GALAXY ( the galactic array array)
 SIZE SIZE ARRAY INFO1 ( planetary array)
 SIZE SIZE ARRAY INFO2 ( strength array)
@@ -55,46 +52,36 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 : DELAY                      ( delay a fixed amount of time)
 	delayms ms  ( wait a second.  Is this long enough?  Who knows, should probably be a CONSTANT)
 ;
-
 : CLEAR-MSGE                 ( clear message area on text screen)
 	18 10 DO
 		I 0 vhtab 50 SPACES
 	LOOP 
 ;
-
 : XY@
 	X @ Y @ 
 ;
-
 : CLEAR-SCREEN ( clear hires screen 1)
 	HCLR 
 ;
-
 : CLEAR-DISP ( fill screen array with FF's)
 	1 1 SCREEN 121 255 FILL 
 ;
-
 : CLEAR-GALAXY ( fills galactic array with NULLS)
 	1 1 GALAXY SIZE SIZE * 0 FILL 
 ;
-
 : CLEAR-INFO ( fills info arrays with NULLs)
 	1 1 INFO1 SIZE SIZE * 0 FILL
 	1 1 INFO2 SIZE SIZE * 0 FILL 
 ;
-
 : RANDOM1 ( --- ran) ( random number in range 1-SIZE)
 	RAND1 @ 37 * 651 + DUP RAND1 ! ABS SIZE MOD 1+ 
 ;
-
 : RANDOM2 ( --- ran ) ( random number in range 1-SIZE)
 	RAND2 @ 53 * 773 + DUP RAND2 ! ABS SIZE MOD 1+ 
 ;
-
 : EDGE-CHECK ( n --- ng ) ( calculates wrap around of galaxy)
 	SIZE 1 - + SIZE MOD 1+ 
 ;
-
 : INPUT ( --- n1 ) ( number input routine)
 	0 BEGIN ( start with zero total)
 		KEY DUP EMIT DUP 8 = ( is it backspace?)
@@ -111,22 +98,18 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 	       ENDIF
 	UNTIL 
 ;
-
 : F ( n1 --- add1 ) ( indexes current fleet array)
 	FLEET-FLAG @ SWAP FLEETS 
 ;
-
 : END-MSGE                  ( end of game message)
 	12 0 vhtab ." END OF GAME COMMANDER " 
 ;
 
 ( graphics shapes and utilities)
 0 VARIABLE SPACEFIG 80 ALLOT  ( shape tables)
-
 : C$                        ( loads 8-bit value into table)
 	OVER C! 1+ 
 ;
-
 : $                         ( loads 16-bit value into table)
 	OVER ! 2 + 
 ;
@@ -166,7 +149,7 @@ DECIMAL DROP
 		( set up black holes)
 	LOOP 
 ;
-
+\ start game
 : INITIALISE         ( initialise all variables and arrays)
 	CR CR
 	BEGIN
@@ -210,7 +193,6 @@ DECIMAL DROP
 	COMP-START !   ( how often computer moves)
 	1 BUY-V ! 
 ;
-
 : DRAW-BORDERS   ( draw borders o-f display and headings)
 	CLEAR-SCREEN
 	HOME
@@ -228,7 +210,6 @@ DECIMAL DROP
 	22 21 vhtab ." CREDITS " 
 	33 colorize
 ;
-
 : FIND-DIRECTION     (  --- X Y )
 	( find out which square player means)
 	32 colorize
@@ -246,7 +227,6 @@ DECIMAL DROP
 	2 F C@ + EDGE-CHECK SWAP
 	1 F C@ + EDGE-CHECK SWAP 
 ;
-
 : PRINT-IT  ( c  --- )
 	( shape determined by c is printed on screen at)
 	( position in X,Y)
@@ -276,7 +256,6 @@ DECIMAL DROP
 		17 ( enemy fleet)    OF 31 colorize ." E" 0 colorize ( enemy fleet)   ENDOF
 	ENDCASE
 ;
-
 : DRAW-SCAN                       ( draw the screen display)
 	1 F C@ 5 - 2 F C@ 5 -
 	11 0 DO
@@ -289,7 +268,6 @@ DECIMAL DROP
 	LOOP
 	DROP DROP 
 ;
-
 : DRAW-FIGURES    ( draw the totals in the disp1ay)
 	2 10 vhtab PLANETS @ 5 .R
 	20 33 vhtab score @ 
@@ -304,11 +282,9 @@ DECIMAL DROP
 	22 10 vhtab 5 F w@ 6 .R
 	22 31 vhtab CREDIT @ 6 .R 
 ;
-
 : DRAW-DISPLAY
 	DRAW-SCAN DRAW-FIGURES 
 ;
-
 : NEW-FLEET  ( fleet destroyed for some reason)
 	\ 24 0 vhtab ." fleet destroyed"
 	\ you can still move the fleet cursor around though
@@ -317,14 +293,12 @@ DECIMAL DROP
 	0 3 F w!                     ( no ships left)
 	0 5 F w!                     ( no legions left)
 ;
-
 : MOVE-FLEET (  X Y ---  )
 	2DUP
 	0 1 F C@ 2 F C@ GALAXY C!   ( remove old symbol)
 	16 ROT ROT GALAXY C!       ( position fleet)
 	2 F C! 1 F C!               ( update fleet array)
 ;
-
 : CHECK-POSITION  ( X Y --- )
 	33 colorize
 	( check if move to position X Y is possib
@@ -339,7 +313,6 @@ DECIMAL DROP
 	ENDCASE
 	DRAW-DISPLAY 
 ;
-
 : OTHER-FLEET   ( make other fleet curent fleet)
 	FLEET-FLAG @ 1 =
 	IF  2 FLEET-FLAG !
@@ -347,27 +320,22 @@ DECIMAL DROP
 	ENDIF
 	DRAW-DISPLAY 
 ;
-
 : MOVE-LEFT
 	1 tcount +!
 	1 F C@ 2 F C@ 1 - CHECK-POSITION 
 ;
-
 : MOVE-RIGHT
 	1 tcount +!
 	1 F C@ 2 F C@ 1+ CHECK-POSITION 
 ;
-
 : MOVE-DOWN
 	1 tcount +!
 	1 F C@ 1+ 2 F C@ CHECK-POSITION 
 ;
-
 : MOVE-UP
 	1 tcount +!
 	1 F C@ 1 - 2 F C@ CHECK-POSITION 
 ;
-
 : ENLIST    ( enlisting 1egions on a planet)
 	1 tcount +!
 	33 colorize
@@ -393,7 +361,6 @@ DECIMAL DROP
 		10 0 vhtab ." NO TROOPS AVAILABLE"
 	ENDIF 
 ;
-
 : BUY    ( purchasing of ships at planet)
 	1 tcount +!
 	33 colorize
@@ -411,7 +378,6 @@ DECIMAL DROP
 		10 0 vhtab ." NO SHIPS AVAILABLE"
 	ENDIF 
 ;
-
 : GATHER   ( pick up legions from garrison onto fleet)
 	1 tcount +!
 	33 colorize
@@ -457,7 +423,6 @@ DECIMAL DROP
 	33 colorize
 	CLEAR-MSGE DRAW-DISPLAY 
 ;
-
 : COLONISE ( attack an uncolonised planet)
 	1 tcount +!
 	CLEAR-MSGE
@@ -481,7 +446,6 @@ DECIMAL DROP
 		FRIENDLY-PLANET
 	ENDIF 
 ;
-
 : EMPTY-PLANET   ( in orbit round uncolonised planet)
 	1 tcount +!
 	CLEAR-MSGE
@@ -493,12 +457,10 @@ DECIMAL DROP
 	ENDIF
 	CLEAR-MSGE 
 ;
-
 : NOT-PLANET   ( there isn't a planet where he's trying to land)
 	10 0 vhtab ." NO PLANET THERE"
 	DELAY CLEAR-MSGE 
 ;
-
 : ATTACK       ( attack a planet controlled by the computer)
 	1 tcount +!
 	CLEAR-MSGE
@@ -527,7 +489,6 @@ DECIMAL DROP
 	ENDIF
 	DELAY CLEAR-MSGE 
 ;
-
 : ENEMY-PLANET   ( player orbits enemy planet)
 	XY@ INFO1 C@ 8 /
 	10 0 vhtab ." CLASS " 2 .R ."  PLANET" CR CR
@@ -539,7 +500,6 @@ DECIMAL DROP
 	ENDIF
 	CLEAR-MSGE 
 ;
-
 : LAND   ( land on adjacent planet)
 	1 tcount +!
 	FIND-DIRECTION
@@ -551,7 +511,6 @@ DECIMAL DROP
 		NOT-PLANET  ( otherwise it's not a planet)
 	ENDCASE 
 ;
-
 : REVOLT? ( planet at X,Y revolts)
 	12 0 vhtab ." PLANET AT " Y @ . X @ . ." REVOLTS" DELAY
 	XY@ INFO1 C@ 8 / XY@ INFO2 C@ 2DUP >
@@ -571,7 +530,6 @@ DECIMAL DROP
 	12 0 vhtab 30 SPACES
 	14 0 vhtab 12 SPACES               ( clear messages)
 ;
-
 : TAX     ( collect taxes on players planets)
 	1 tcount +!
 	0 VTAX !                           ( set tax to 0)
@@ -597,7 +555,6 @@ DECIMAL DROP
 	CREDIT @ VTAX @ + CREDIT !            ( update credit)
 	CLEAR-MSGE DRAW-DISPLAY 
 ;
-
 : COMPUTER-TURN   ( computers turn to do something)
 	-1 NEW +!                            ( decrement NEW)
 	NEW @ 0=
@@ -639,7 +596,6 @@ DECIMAL DROP
 	LOOP
 	DRAW-FIGURES 
 ;
-
 : FIRE     ( players fleet attacks computer fleet)
 	1 tcount +!
 	0 X !
@@ -680,6 +636,7 @@ DECIMAL DROP
 	DELAY DELAY DRAW-DISPLAY CLEAR-MSGE 
 ;
 
+\ exit the game with better closing all properly & making score file if needed
 : exitprog ( -- ) 
 	\ quit properly program
 	PLANETS @ C-PLANETS @ - W1 * abs score ! 
@@ -730,14 +687,13 @@ decimal
 		COMPUTER ! 0
 	ENDIF 
 ;
-
 : othergamend? ( -- ) 
 	\ other conditions to end the game
 	start @ -5000 <= if 31 colorize ." Critical score : Game ENDED ! " key exitprog then 
 	LEN @ 0 <= if 31 colorize ." to much moves : Game ENDED ! " key exitprog then 
 	tcount @ 35000000 >= if 31 colorize ." You played to much : Game ENDED ! " key exitprog then 
 ;
-
+\ main process of game
 : RESTART        ( restarts the stopped game)
 	1 tcount +!
 	rnd drop
@@ -765,7 +721,7 @@ decimal
 	UNTIL
 	END-MSGE 
 ;
-
+\ startup
 : CONQUEST  ( the main game word)
 	1 tcount +!
 	checkversion 
@@ -779,5 +735,5 @@ decimal
 	RESTART 
 ;
 
-CONQUEST	\ main
+CONQUEST	
 BYE
