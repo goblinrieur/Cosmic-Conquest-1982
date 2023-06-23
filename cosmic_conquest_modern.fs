@@ -42,17 +42,17 @@ require random.fs
 	CREATE DUP C, * ALLOT DOES>
 	ROT 1 - OVER C@ * + + 
 ;
-SIZE SIZE ARRAY GALAXY ( the galactic array array)
-SIZE SIZE ARRAY INFO1 ( planetary array)
-SIZE SIZE ARRAY INFO2 ( strength array)
-11 11 ARRAY SCREEN ( the screen array)
-2 6 ARRAY FLEETS ( player fleets info)
+SIZE SIZE ARRAY GALAXY 		( the galactic array array)
+SIZE SIZE ARRAY INFO1 		( planetary array)
+SIZE SIZE ARRAY INFO2 		( strength array)	
+11 11 ARRAY SCREEN 		( the screen array)
+2 6 ARRAY FLEETS 		( player fleets info)
 
 ( general utility words)
-: DELAY                      ( delay a fixed amount of time)
-	delayms ms  ( wait a second.  Is this long enough?  Who knows, should probably be a CONSTANT)
+: DELAY                      	( delay a fixed amount of time)
+	delayms ms  		( wait a second.  Is this long enough?  Who knows, should probably be a CONSTANT)
 ;
-: CLEAR-MSGE                 ( clear message area on text screen)
+: CLEAR-MSGE                 	( clear message area on text screen)
 	18 10 DO
 		I 0 vhtab 50 SPACES
 	LOOP 
@@ -74,7 +74,7 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 	1 1 INFO2 SIZE SIZE * 0 FILL 
 ;
 : RANDOM1 ( --- ran) ( random number in range 1-SIZE)
-	RAND1 @ 37 * 651 + DUP RAND1 ! ABS SIZE MOD 1+ 
+  	RAND1 @ 37 * 651 + DUP RAND1 ! ABS SIZE MOD 1+ 
 ;
 : RANDOM2 ( --- ran ) ( random number in range 1-SIZE)
 	RAND2 @ 53 * 773 + DUP RAND2 ! ABS SIZE MOD 1+ 
@@ -639,12 +639,12 @@ DECIMAL DROP
 \ exit the game with better closing all properly & making score file if needed
 : exitprog ( -- ) 
 	\ quit properly program
-	PLANETS @ C-PLANETS @ - W1 * abs score ! 
+	PLANETS @ C-PLANETS @ - W1 * score ! 
 	highscore?		\ write highscore if possble (if player made it)
 	page			\ clearscreen
 	cr ." Your final score was : " score @ . cr
 	0 colorize		\ restore colors
-	s" tput cnorm" system 	\ restore cursor
+	.\" \e[?25h"	 	\ restore cursor
 	bye
 ;
 
@@ -662,7 +662,7 @@ HEX
 	   ( I) 49 OF MOVE-UP     ENDOF
 	   ( k) 4B OF MOVE-DOWN   ENDOF
 	   ( C) 43 OF OTHER-FLEET ENDOF
-	   ( R) 52 OF KEY 	     ENDOF
+	   ( R) 52 OF KEY 	  ENDOF
 	   ( G) 47 OF LAND        ENDOF
 	   ( T) 54 OF TAX         ENDOF
 	   ( F) 46 OF FIRE        ENDOF
@@ -689,9 +689,8 @@ decimal
 ;
 : othergamend? ( -- ) 
 	\ other conditions to end the game
-	start @ -5000 <= if 31 colorize ." Critical score : Game ENDED ! " key exitprog then 
+	score @ -5000 <= if 31 colorize ." Critical score : Game ENDED ! " key exitprog then 
 	LEN @ 0 <= if 31 colorize ." to much moves : Game ENDED ! " key exitprog then 
-	tcount @ 35000000 >= if 31 colorize ." You played to much : Game ENDED ! " key exitprog then 
 ;
 \ main process of game
 : RESTART        ( restarts the stopped game)
@@ -725,15 +724,15 @@ decimal
 : CONQUEST  ( the main game word)
 	1 tcount +!
 	checkversion 
-	page	\ clear screen
+	page							\ clear screen
 	31 colorize
-	s" gamedata/title.txt" slurp-file type rand1 ! cr		\ title 
+	s" gamedata/title.txt" slurp-file type rand1 ! cr	\ title 
 	33 colorize
-	s" tput civis" system					\ hide cursor to avoid it blinking 
+	.\" \e[?25l"						\ hide cursor
 	s" gamedata/author.txt" slurp-file cr type key Rand2 ! cr 	\ auhor
+	readfile
 	INITIALISE
 	RESTART 
 ;
 
 CONQUEST	
-BYE
