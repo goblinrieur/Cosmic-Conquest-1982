@@ -16,7 +16,7 @@ __   __/ _ \ / | |___ /
 
 From now v0.1.3 - this diverge & becomes more modern & less retro compatible.
 
-This will also become specific to gforth 0.7.x, more or less. 
+This will also become specific to gforth 0.7.x, more or less. And curently to linux compatible shells (android/macOSX/Linux) 
 
 ![2.png](./gamedata/2.png)
 

@@ -644,7 +644,7 @@ DECIMAL DROP
 	page			\ clearscreen
 	cr ." Your final score was : " score @ . cr
 	0 colorize		\ restore colors
-	s" tput cnorm" system 	\ restore cursor
+	.\" \e[?25h"	 	\ restore cursor
 	bye
 ;
 
@@ -662,7 +662,7 @@ HEX
 	   ( I) 49 OF MOVE-UP     ENDOF
 	   ( k) 4B OF MOVE-DOWN   ENDOF
 	   ( C) 43 OF OTHER-FLEET ENDOF
-	   ( R) 52 OF KEY 	     ENDOF
+	   ( R) 52 OF KEY 	  ENDOF
 	   ( G) 47 OF LAND        ENDOF
 	   ( T) 54 OF TAX         ENDOF
 	   ( F) 46 OF FIRE        ENDOF
@@ -728,11 +728,10 @@ decimal
 	31 colorize
 	s" gamedata/title.txt" slurp-file type rand1 ! cr	\ title 
 	33 colorize
-	s" tput civis" system					\ hide cursor to avoid it blinking 
+	.\" \e[?25l"						\ hide cursor
 	s" gamedata/author.txt" slurp-file cr type key Rand2 ! cr 	\ auhor
 	INITIALISE
 	RESTART 
 ;
 
 CONQUEST	
-BYE
