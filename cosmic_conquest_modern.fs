@@ -639,7 +639,7 @@ DECIMAL DROP
 \ exit the game with better closing all properly & making score file if needed
 : exitprog ( -- ) 
 	\ quit properly program
-	PLANETS @ C-PLANETS @ - W1 * abs score ! 
+	PLANETS @ C-PLANETS @ - W1 * score ! 
 	highscore?		\ write highscore if possble (if player made it)
 	page			\ clearscreen
 	cr ." Your final score was : " score @ . cr
