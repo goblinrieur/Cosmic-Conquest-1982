@@ -730,6 +730,7 @@ decimal
 	33 colorize
 	.\" \e[?25l"						\ hide cursor
 	s" gamedata/author.txt" slurp-file cr type key Rand2 ! cr 	\ auhor
+	readfile
 	INITIALISE
 	RESTART 
 ;
