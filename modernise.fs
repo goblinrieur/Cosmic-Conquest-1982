@@ -20,19 +20,10 @@ variable fd-in
 : home ( -- ) ( set cursor to home position, using ANSI codes)
 	.\" \e[H" 
 ;
-\ real HCLR would clear HIRES1
-: hclr ( -- ) ( clear screen using ANSI codes)
-	page
-;
 \
 : vhtab ( y x -- x y -- ) ( position cursor on screen, using ANSI codes)
 	swap at-xy
 ;
-( POSSIBLE FIG WORDS NOT SUPPORTED IN ANS FORTH)
-\ HELPFUL RESOURCE: https://dwheeler.com/6502/fig-forth-glossary.txt
-\ Helpful book: Forth Fundamentals Vol. 2, C. Kevin McCabe, dilithium Press 1983, ISBN 0-88056-092-4
-: MINUS negate	 ( FFv2 page 97) ;
-: -DUP ?dup	 ( FFv2 page 39) ;
 \ this woudln't be a problem on the Apple ][ but on modern systems the KEY routine is case sensitive
 : inkey ( -- key)
 	key dup dup

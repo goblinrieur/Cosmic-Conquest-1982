@@ -61,7 +61,7 @@ SIZE SIZE ARRAY INFO2 ( strength array)
 	X @ Y @ 
 ;
 : CLEAR-SCREEN ( clear hires screen 1)
-	HCLR 
+	page
 ;
 : CLEAR-DISP ( fill screen array with FF's)
 	1 1 SCREEN 121 255 FILL 
@@ -160,7 +160,7 @@ DECIMAL DROP
 		ENDIF
 	UNTIL
 	DIFF !      ( store difficulty)
-	hclr ( screen is messy otherwise)
+	page ( screen is messy otherwise)
 	HOME CR CR
 	." DO YOU WANT" CR ." 1. SHORT" CR ." 2. MEDIUM" CR
 	." 3. LONG" CR ." GAME"
@@ -483,7 +483,7 @@ DECIMAL DROP
 		1 PLANETS +!             ( increment planets)
 		500 score +! 		\ increase score then ! 
 		-1 C-PLANETS +!          ( decrement computer planets)
-		XY@ INFO1 C@ 8 / MINUS CLASS-TOTALS +!
+		XY@ INFO1 C@ 8 / negate CLASS-TOTALS +!
 		DELAY                   ( reduce classes of compo plnts)
 		FRIENDLY-PLANET
 	ENDIF
@@ -543,7 +543,7 @@ DECIMAL DROP
 				VTAX @ + DUP VTAX !  ( update tax)
 				VTAX @ score +! \ add tax on score ! 
 				10 17 vhtab 5 .R
-				I J INFO1 C@ 7 AND -DUP
+				I J INFO1 C@ 7 AND ?dup
 				IF ( doesn't revolt)
 					I J INFO1 DUP C@ 1 - SWAP C!
 				ELSE ( revolt)
@@ -651,7 +651,7 @@ DECIMAL DROP
 HEX
 
 : OBEY-COMMAND
-	BUY-V @ -DUP ( fetch BUY-V, duplicate if nonzero)
+	BUY-V @ ?dup ( fetch BUY-V, duplicate if nonzero)
 	IF ( nonzero)
 		1 - BUY-V !
 	ENDIF
