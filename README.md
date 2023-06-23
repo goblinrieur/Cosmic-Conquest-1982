@@ -6,13 +6,17 @@ A copy of it is still in local [Original](./Original/) directory too. See [Origi
 
 # Forked version 
 ```
-        ___   _   ____  
-__   __/ _ \ / | |___ \ 
-\ \ / / | | || |   __) |
- \ V /| |_| || |_ / __/ 
-  \_/  \___(_)_(_)_____|
+        ___   _   _____ 
+__   __/ _ \ / | |___ / 
+\ \ / / | | || |   |_ \ 
+ \ V /| |_| || |_ ___) |
+  \_/  \___(_)_(_)____/ 
                         
 ```
+
+From now v0.1.3 - this diverge & becomes more modern & less retro compatible.
+
+This will also become specific to gforth 0.7.x, more or less. 
 
 ![2.png](./gamedata/2.png)
 
