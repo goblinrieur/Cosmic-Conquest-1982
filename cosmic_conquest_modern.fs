@@ -7,7 +7,7 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 5 CONSTANT W2                       ( weight assigned to ship and troops)
 10 CONSTANT W3                      ( weight assigned to computers troops)
 20000 CONSTANT SPEED                ( how quickly computer moves)
-250 constant delayms 		    ( milliseconds to wait for in DELAY) \ accelerate by 4
+200 constant delayms	 		    ( milliseconds to wait for in DELAY) \ accelerate by 4
 ( VARIABLES)
 0 VARIABLE BUY-V        ( count to stop player buying every move)
 0 VARIABLE C-FLEETS     ( no. of computer fleets)
@@ -53,8 +53,8 @@ SIZE SIZE ARRAY INFO2 		( strength array)
 	delayms ms  		( wait a second.  Is this long enough?  Who knows, should probably be a CONSTANT)
 ;
 : CLEAR-MSGE                 	( clear message area on text screen)
-	18 10 DO
-		I 0 vhtab 50 SPACES
+	19 9 DO
+		I 0 vhtab 59 SPACES
 	LOOP 
 ;
 : XY@
@@ -239,7 +239,7 @@ DECIMAL DROP
 		 2 ( a star)         OF 3 SKETCH ( draw star)     ENDOF
 		 4 ( empty planet)   OF 2 SKETCH ( a planet)      ENDOF
 		 5 ( enemy planet)   OF 2 SKETCH ( a planet)      ENDOF
-	       132 ( players planet) OF 1 SKETCH ( a colony)      ENDOF
+	   132 ( players planet) OF 1 SKETCH ( a colony)      ENDOF
 		16 ( players fleet)  OF 4 SKETCH ( players fleet) ENDOF
 		17 ( enemy fleet)    OF 5 SKETCH ( enemy fleet)   ENDOF
 	ENDCASE
@@ -251,7 +251,7 @@ DECIMAL DROP
 		 2 ( a star)         OF 33 colorize ." *" 0 colorize ( draw star)     ENDOF
 		 4 ( empty planet)   OF 36 colorize ." O" 0 colorize ( a planet)      ENDOF
 		 5 ( enemy planet)   OF 36 colorize ." 0" 0 colorize ( a planet)      ENDOF
-	       132 ( players planet) OF 31 colorize ." @" 0 colorize ( a colony)      ENDOF
+	   132 ( players planet) OF 31 colorize ." @" 0 colorize ( a colony)      ENDOF
 		16 ( players fleet)  OF 0 colorize ." P" 0 colorize ( players fleet)  ENDOF
 		17 ( enemy fleet)    OF 31 colorize ." E" 0 colorize ( enemy fleet)   ENDOF
 	ENDCASE
@@ -405,11 +405,11 @@ DECIMAL DROP
 		." LOCAL GARRISON IS " XY@ INFO2 C@ 3 .R ."  LEGIONS"
 					( give size of local garrison)
 		12 0 vhtab ." DO YOU WISH TO:" 12 SPACES ( give options)
-		CR ." 1.  LEAVE LEGIONS ON PLANET"
-		CR ." 2.  GATHER LEGIONS FROM PLANET"
-		CR ." 3.  BUY SHIPS"
-		CR ." 4.  ENLIST TROOPS"
-		CR ." 5.  LEAVE" CR
+		CR ." 1.  LEAVE LEGIONS ON PLANET" 5 spaces
+		CR ." 2.  GATHER LEGIONS FROM PLANET" 2 spaces
+		CR ." 3.  BUY SHIPS" 19 spaces
+		CR ." 4.  ENLIST TROOPS" 15 spaces
+		CR ." 5.  LEAVE" 22 spaces CR
 		KEY 127 AND              ( get reply)
 		CLEAR-MSGE
 		CASE
@@ -487,7 +487,7 @@ DECIMAL DROP
 		DELAY                   ( reduce classes of compo plnts)
 		FRIENDLY-PLANET
 	ENDIF
-	DELAY CLEAR-MSGE 
+	DELAY CLEAR-MSGE
 ;
 : ENEMY-PLANET   ( player orbits enemy planet)
 	XY@ INFO1 C@ 8 /
@@ -519,12 +519,13 @@ DECIMAL DROP
 		8 * 7 + XY@ INFO1 C!            ( set revolt factor 7)
 		0 XY@ INFO2 C!                  ( set lpgions to 0)
 		-1 PLANETS +!                   ( reduce no.of planets )
-		-1000 score +! 			\ loosing planet makes a score crash ! 
+		-1000 score +!		 			\ loosing planet makes a score crash ! 
 		14 0 vhtab ." SUCCEEDS"
 	ELSE ( revolt fails)
 		SWAP 2 / - XY@ INFO2 C!         ( reduce legions)
 		XY@ INFO1 C@ 7 OR XY@ INFO1 C!  ( set revolt factor 7)
 		14 0 vhtab ." FAILS"
+		10 score +!
 	ENDIF
 	DELAY
 	12 0 vhtab 30 SPACES
@@ -539,9 +540,9 @@ DECIMAL DROP
 		SIZE 1+ 1 DO
 			I J GALAXY C@ 132 =
 			IF   ( it's a colony)
-				I J INFO1 C@ 3 * 5 / ( tax from planet)
-				VTAX @ + DUP VTAX !  ( update tax)
-				VTAX @ score +! \ add tax on score ! 
+				I J INFO1 C@ 3 * 5 /	( tax from planet)
+				VTAX @ + DUP VTAX ! 	( update tax)
+				VTAX @ score +!			\ add tax on score ! 
 				10 17 vhtab 5 .R
 				I J INFO1 C@ 7 AND ?dup
 				IF ( doesn't revolt)
@@ -639,7 +640,7 @@ DECIMAL DROP
 \ exit the game with better closing all properly & making score file if needed
 : exitprog ( -- ) 
 	\ quit properly program
-	PLANETS @ C-PLANETS @ - W1 * score ! 
+	30 PLANETS @ + C-PLANETS @ - W1 * score ! 
 	highscore?		\ write highscore if possble (if player made it)
 	page			\ clearscreen
 	cr ." Your final score was : " score @ . cr
@@ -662,7 +663,7 @@ HEX
 	   ( I) 49 OF MOVE-UP     ENDOF
 	   ( k) 4B OF MOVE-DOWN   ENDOF
 	   ( C) 43 OF OTHER-FLEET ENDOF
-	   ( R) 52 OF KEY 	  ENDOF
+	   ( R) 52 OF KEY		  ENDOF
 	   ( G) 47 OF LAND        ENDOF
 	   ( T) 54 OF TAX         ENDOF
 	   ( F) 46 OF FIRE        ENDOF
@@ -699,15 +700,9 @@ decimal
 	CLEAR-DISP
 	HOME DRAW-BORDERS DRAW-DISPLAY
 	BEGIN
-		\ ?TERMINAL
-		\ I think this means something else here, is ?TERMINAL meant to mean "check for keypress"
-		\ rather than "check for break" ?
 		key?
 		IF    ( player has pressed a key)
 			OBEY-COMMAND
-			\ -1 LEN + !
-			\ COMPUTER-TURN
-			100 ms
 		ENDIF
 		COMPUTER?
 		IF
@@ -715,18 +710,18 @@ decimal
 		ENDIF
 		othergamend? ( exit ? ) \ new way to end the game
 		LEN @ 0=
-		\ slow the game a little by printing how many loops until it's the computer's turn
 		0 30 vhtab computer @ .
 	UNTIL
 	END-MSGE 
+	draw-display
 ;
 \ startup
 : CONQUEST  ( the main game word)
 	1 tcount +!
 	checkversion 
-	page							\ clear screen
+	page								\ clear screen
 	31 colorize
-	s" gamedata/title.txt" slurp-file type rand1 ! cr	\ title 
+	s" gamedata/title.txt" slurp-file type rand1 ! cr			\ title 
 	33 colorize
 	.\" \e[?25l"						\ hide cursor
 	s" gamedata/author.txt" slurp-file cr type key Rand2 ! cr 	\ auhor
