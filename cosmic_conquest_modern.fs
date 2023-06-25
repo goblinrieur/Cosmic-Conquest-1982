@@ -24,7 +24,6 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 0 VARIABLE PLANETS      ( no. of players planets)
 0 VARIABLE RAND1        ( first random number seed)
 0 VARIABLE RAND2        ( second random number seed)
-0 VARIABLE START        ( starting score in the game)
 0 VARIABLE TEMP1        ( a temporary storage v ariable)
 0 VARIABLE TROOPS       ( no. of computers troops in game)
 0 VARIABLE Tcount
@@ -74,10 +73,10 @@ SIZE SIZE ARRAY INFO2 		( strength array)
 	1 1 INFO2 SIZE SIZE * 0 FILL 
 ;
 : RANDOM1 ( --- ran) ( random number in range 1-SIZE)
-  	RAND1 @ 37 * 651 + DUP RAND1 ! ABS SIZE MOD 1+ 
+    rnd 30 random 1 +  rand1 ! abs size mod 1+ 	
 ;
 : RANDOM2 ( --- ran ) ( random number in range 1-SIZE)
-	RAND2 @ 53 * 773 + DUP RAND2 ! ABS SIZE MOD 1+ 
+    rnd 30 random 1 +  rand2 ! abs size mod 1+ 	
 ;
 : EDGE-CHECK ( n --- ng ) ( calculates wrap around of galaxy)
 	SIZE 1 - + SIZE MOD 1+ 
@@ -614,11 +613,11 @@ DECIMAL DROP
 	ELSE
 		3 F w@ XY@ INFO2 C@ OVER 4 * 10 /
 		OVER 4 * 10 / DUP
-		10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 100 + start ! \ add 1 to score on combat
+		10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" score @ 100 + score ! \ add 1 to score on combat
 		ROT ROT - 0 MAX DUP 0=
 		IF ( computers fleet destroyed)
 			DROP TROOPS @ XY@ INFO2 C@ - TROOPS !
-			start @ 400 + start ! \ add 5 to score on winning a fight
+			400 score +!
 			( reduce computers troops)
 			0 XY@ GALAXY C!          ( destroy fleet symbol)
 			-1 C-FLEETS +!        ( reduce comps fleets)
