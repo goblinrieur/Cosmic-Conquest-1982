@@ -24,18 +24,21 @@ This will also become specific to gforth 0.7.x, more or less. And curently to li
 
 Project seems abandoned since about 2 years now. Forked on Wed Jun 21
 
+- [ ] Add Makefile for latter usage (run/test/install/etc...)
 - [ ] Modernize all the code & remove some useless words that are no more needed here
-- [X] code documentation is currently so bad...
-- [X] there are no score file generated
-- [ ] will try to do some improvement too
-- [X] games is not starting automatically on load 
-- [X] key map is not pleasant to me 
-- [X] missing LICENSE file as there was originally no file the [unlicensed](./LICENSE) is the one to use.
-- [X] missing a quit in game to go back to system 
-- [X] no gforth version checking 
-- [X] there are no colors 
-- [X] why is there 2 key press needed on start 
-- [X] will include original magazine notes too 
+- [ ] Will try to do some improvement too
+- [X] Change score management/calculations
+- [X] Code documentation is currently so bad...
+- [X] Games is not starting automatically on load 
+- [X] Key map is not pleasant to me 
+- [X] Missing LICENSE file as there was originally no file the [unlicensed](./LICENSE) is the one to use.
+- [X] Missing a quit in game to go back to system 
+- [X] Modernize random sequences
+- [X] No gforth version checking 
+- [X] There are no colors 
+- [X] There are no score file generated
+- [X] Why is there 2 key press needed on start 
+- [X] Will include original magazine notes too 
 
 ![1.png](./gamedata/1.png)
 
@@ -52,7 +55,6 @@ Attempts at emulation have not gone well because we cannot determine the exact F
  * `Original` - repo as is before forking it
  * `cosmic_conquest_modern.fs` - "40Th Anniversary Edition". A modernized version of the game, playable on GForth.
  * `modernize.fs` - also comes from fork
-
 
 # How to Run - TO BE CHANGED
 
@@ -75,7 +77,7 @@ Just run
 
 Key controls:
 
- * `J`, `L`, `I`, `k` - Directional controls - standard VIM mode :) 
+ * `J`, `L`, `I`, `k` - Directional controls - J to left / K to down / I to up / L to right
  * `T` - **T**ax your planets
  * `G` - **L**and on a planet - Ground
  * `R` - **I**nformation - Radar
