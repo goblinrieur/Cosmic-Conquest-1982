@@ -7,7 +7,6 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 5 CONSTANT W2                       ( weight assigned to ship and troops)
 10 CONSTANT W3                      ( weight assigned to computers troops)
 20000 CONSTANT SPEED                ( how quickly computer moves)
-200 constant delayms	 		    ( milliseconds to wait for in DELAY) \ accelerate by 4
 ( VARIABLES)
 0 VARIABLE BUY-V        ( count to stop player buying every move)
 0 VARIABLE C-FLEETS     ( no. of computer fleets)
@@ -26,7 +25,6 @@ SIZE 3 * 2 / CONSTANT NO-OF-PLANETS ( planets in galaxy)
 0 VARIABLE RAND2        ( second random number seed)
 0 VARIABLE TEMP1        ( a temporary storage v ariable)
 0 VARIABLE TROOPS       ( no. of computers troops in game)
-0 VARIABLE Tcount
 0 VARIABLE VTAX         ( tax collected)
 0 VARIABLE X            ( temporary storage for X position)
 0 VARIABLE Y            ( temporary storage for Y position)
@@ -44,12 +42,12 @@ require random.fs
 SIZE SIZE ARRAY GALAXY 		( the galactic array array)
 SIZE SIZE ARRAY INFO1 		( planetary array)
 SIZE SIZE ARRAY INFO2 		( strength array)	
-11 11 ARRAY SCREEN 		( the screen array)
-2 6 ARRAY FLEETS 		( player fleets info)
+11 11 ARRAY SCREEN 			( the screen array)
+2 6 ARRAY FLEETS	 		( player fleets info)
 
 ( general utility words)
 : DELAY                      	( delay a fixed amount of time)
-	delayms ms  		( wait a second.  Is this long enough?  Who knows, should probably be a CONSTANT)
+	200 ms				  		( wait ? is this wait time really necessary ? )
 ;
 : CLEAR-MSGE                 	( clear message area on text screen)
 	19 9 DO
@@ -320,23 +318,18 @@ DECIMAL DROP
 	DRAW-DISPLAY 
 ;
 : MOVE-LEFT
-	1 tcount +!
 	1 F C@ 2 F C@ 1 - CHECK-POSITION 
 ;
 : MOVE-RIGHT
-	1 tcount +!
 	1 F C@ 2 F C@ 1+ CHECK-POSITION 
 ;
 : MOVE-DOWN
-	1 tcount +!
 	1 F C@ 1+ 2 F C@ CHECK-POSITION 
 ;
 : MOVE-UP
-	1 tcount +!
 	1 F C@ 1 - 2 F C@ CHECK-POSITION 
 ;
 : ENLIST    ( enlisting 1egions on a planet)
-	1 tcount +!
 	33 colorize
 	BUY-V @ 0=
 	IF  ( it's ok to buy)
@@ -361,7 +354,6 @@ DECIMAL DROP
 	ENDIF 
 ;
 : BUY    ( purchasing of ships at planet)
-	1 tcount +!
 	33 colorize
 	BUY-V @ 0=
 	IF    ( it's ok to buy)
@@ -378,7 +370,6 @@ DECIMAL DROP
 	ENDIF 
 ;
 : GATHER   ( pick up legions from garrison onto fleet)
-	1 tcount +!
 	33 colorize
 	10 0 vhtab ." HOW MANY DO YOU WISH TO TAKE? " INPUT
 	XY@ INFO2 C@ MIN TEMP1 !  ( no more than are there)
@@ -387,7 +378,6 @@ DECIMAL DROP
 ;
 \ Orignal name: "LEAVE"
 : DEPLOY   ( leave legions from fleet on planet as garrison)
-	1 tcount +!
 	33 colorize
 	10 0 vhtab ." HOW MANY DO YOU WISH TO LEAVE? " INPUT
 	5 F w@ MIN TEMP1 !         ( no more than you have)
@@ -396,7 +386,6 @@ DECIMAL DROP
 	XY@ INFO2 C!             ( update on planet)
 ;
 : FRIENDLY-PLANET   ( options upon landing at colony)
-	1 tcount +!
 	BEGIN
 		33 colorize
 		10 0 vhtab ." CLASS " XY@ INFO1 C@ 8 / 2 .R
@@ -423,7 +412,6 @@ DECIMAL DROP
 	CLEAR-MSGE DRAW-DISPLAY 
 ;
 : COLONISE ( attack an uncolonised planet)
-	1 tcount +!
 	CLEAR-MSGE
 	XY@ INFO1 C@ 8 / RANDOM1 1 - 5 / 7 + * 10 / DUP TEMP1 !
 	( calaculate relative strength of planet)
@@ -446,7 +434,6 @@ DECIMAL DROP
 	ENDIF 
 ;
 : EMPTY-PLANET   ( in orbit round uncolonised planet)
-	1 tcount +!
 	CLEAR-MSGE
 	10 0 vhtab ." UNCOLONISED CLASS " XY@ INFO1 C@ 8 / 2 .R
 	." PLANET"
@@ -461,7 +448,6 @@ DECIMAL DROP
 	DELAY CLEAR-MSGE 
 ;
 : ATTACK       ( attack a planet controlled by the computer)
-	1 tcount +!
 	CLEAR-MSGE
 	XY@ INFO2 C@ RANDOM1 1 - 5 / 7 + * 10 / DUP TEMP1 !
                ( calaculate enemy garrlsons effective strength)
@@ -500,7 +486,6 @@ DECIMAL DROP
 	CLEAR-MSGE 
 ;
 : LAND   ( land on adjacent planet)
-	1 tcount +!
 	FIND-DIRECTION
 	2DUP Y ! X ! GALAXY C@
 	CASE
@@ -531,7 +516,6 @@ DECIMAL DROP
 	14 0 vhtab 12 SPACES               ( clear messages)
 ;
 : TAX     ( collect taxes on players planets)
-	1 tcount +!
 	0 VTAX !                           ( set tax to 0)
 	10 0 vhtab ." TAX COLLECTED = "
 	10 17 vhtab 0 .
@@ -597,7 +581,6 @@ DECIMAL DROP
 	DRAW-FIGURES 
 ;
 : FIRE     ( players fleet attacks computer fleet)
-	1 tcount +!
 	0 X !
 	2 F C@ 2 + DUP 3 - DO
 		1 F C@ 2 + DUP 3 - DO
@@ -642,7 +625,7 @@ DECIMAL DROP
 	30 PLANETS @ + C-PLANETS @ - W1 * score ! 
 	highscore?		\ write highscore if possble (if player made it)
 	page			\ clearscreen
-	cr ." Your final score was : " score @ . cr
+	."  Your final score was : " score @ . cr
 	0 colorize		\ restore colors
 	.\" \e[?25h"	 	\ restore cursor
 	bye
@@ -679,7 +662,6 @@ HEX
 decimal
 
 : COMPUTER?    ( is it the computers turn or not)
-	1 tcount +!
 	COMPUTER @ 1 - DUP 0=
 	IF
 		COMP-START @ COMPUTER ! DROP 1
@@ -694,7 +676,6 @@ decimal
 ;
 \ main process of game
 : RESTART        ( restarts the stopped game)
-	1 tcount +!
 	rnd drop
 	CLEAR-DISP
 	HOME DRAW-BORDERS DRAW-DISPLAY
@@ -716,7 +697,6 @@ decimal
 ;
 \ startup
 : CONQUEST  ( the main game word)
-	1 tcount +!
 	checkversion 
 	page								\ clear screen
 	31 colorize
