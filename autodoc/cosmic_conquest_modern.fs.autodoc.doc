@@ -1,4 +1,3 @@
-250 constant delayms 		    ( milliseconds to wait for in DELAY) \ accelerate by 4
 : ARRAY ( 2D Array)
 : DELAY                      	( delay a fixed amount of time)
 : CLEAR-MSGE                 	( clear message area on text screen)
@@ -58,13 +57,12 @@ SPACEFIG                    ( load shape tables)  \ game map
 : ENEMY-PLANET   ( player orbits enemy planet)
 : LAND   ( land on adjacent planet)
 : REVOLT? ( planet at X,Y revolts)
-		-1000 score +! 			\ loosing planet makes a score crash ! 
+		-1000 score +!		 			\ loosing planet makes a score crash ! 
 : TAX     ( collect taxes on players planets)
-				VTAX @ score +! \ add tax on score ! 
+				VTAX @ score +!			\ add tax on score ! 
 : COMPUTER-TURN   ( computers turn to do something)
 : FIRE     ( players fleet attacks computer fleet)
-		10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" start @ 100 + start ! \ add 1 to score on combat
-			start @ 400 + start ! \ add 5 to score on winning a fight
+		10 0 vhtab ." FLEET HIT BY " 5 .R ." UNITS" score @ 100 + score ! \ add 1 to score on combat
 \ exit the game with better closing all properly & making score file if needed
 : exitprog ( -- ) 
 	\ quit properly program
@@ -83,16 +81,10 @@ SPACEFIG                    ( load shape tables)  \ game map
 	\ other conditions to end the game
 \ main process of game
 : RESTART        ( restarts the stopped game)
-		\ ?TERMINAL
-		\ I think this means something else here, is ?TERMINAL meant to mean "check for keypress"
-		\ rather than "check for break" ?
-			\ -1 LEN + !
-			\ COMPUTER-TURN
 		othergamend? ( exit ? ) \ new way to end the game
-		\ slow the game a little by printing how many loops until it's the computer's turn
 \ startup
 : CONQUEST  ( the main game word)
-	page							\ clear screen
-	s" gamedata/title.txt" slurp-file type rand1 ! cr	\ title 
+	page								\ clear screen
+	s" gamedata/title.txt" slurp-file type rand1 ! cr			\ title 
 	.\" \e[?25l"						\ hide cursor
 	s" gamedata/author.txt" slurp-file cr type key Rand2 ! cr 	\ auhor
