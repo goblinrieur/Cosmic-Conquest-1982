@@ -24,9 +24,9 @@ This will also become specific to gforth 0.7.x, more or less. And curently to li
 
 Project seems abandoned since about 2 years now. Forked on Wed Jun 21
 
-- [ ] Add Makefile for latter usage (run/test/install/etc...)
 - [ ] Modernize all the code & remove some useless words that are no more needed here
 - [ ] Will try to do some improvement too
+- [X] Add Makefile for latter usage (run/test/install/etc...)
 - [X] Change score management/calculations
 - [X] Code documentation is currently so bad...
 - [X] Games is not starting automatically on load 
@@ -94,4 +94,21 @@ Special thanks goes to the folks who made this restoration possible:
  * [Gordon JC Pearce](https://github.com/gordonjcp) - Ported the historic 1982 source code to GForth.
  * [tmr4](https://github.com/tmr4) - Data entry of original sources.
  * [Rick Carlino](https://github.com/RickCarlino/) - Documentation, proofing, data entry.
+
+# play it from container 
+
+you can adapt the Makefile to your own needs/environnements but keep in mind the minimum steps below 
+
+```
+make Dockerfile
+make container
+make runcontainer
+make clean
+```
+
+If you already built the container just run it from docker 
+
+```
+docker run -it cosmic_conquest:latest
+```
 
