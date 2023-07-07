@@ -112,3 +112,10 @@ If you already built the container just run it from docker
 docker run -it cosmic_conquest:latest
 ```
 
+you can play directly from shell with 
+
+```
+make run
+```
+
+

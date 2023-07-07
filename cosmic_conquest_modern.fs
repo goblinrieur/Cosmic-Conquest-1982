@@ -47,7 +47,7 @@ SIZE SIZE ARRAY INFO2 		( strength array)
 
 ( general utility words)
 : DELAY                      	( delay a fixed amount of time)
-	200 ms				  		( wait ? is this wait time really necessary ? )
+	100 ms				  		( wait ? is this wait time really necessary ? )
 ;
 : CLEAR-MSGE                 	( clear message area on text screen)
 	19 9 DO
