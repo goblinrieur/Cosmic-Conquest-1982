@@ -312,7 +312,7 @@ DECIMAL DROP
 ;
 : OTHER-FLEET   ( make other fleet curent fleet)
 	FLEET-FLAG @ 1 =
-	IF  2 FLEET-FLAG !
+	IF   2 FLEET-FLAG !
 	ELSE 1 FLEET-FLAG !
 	ENDIF
 	DRAW-DISPLAY 
@@ -384,6 +384,7 @@ DECIMAL DROP
 	5 F w@ TEMP1 @ - 5 F w!     ( update legions on fleet)
 	XY@ INFO2 C@ TEMP1 @ + 255 MIN ( no more than 255)
 	XY@ INFO2 C!             ( update on planet)
+	draw-display
 ;
 : FRIENDLY-PLANET   ( options upon landing at colony)
 	BEGIN
@@ -693,7 +694,7 @@ decimal
 		0 30 vhtab computer @ .
 	UNTIL
 	END-MSGE 
-	draw-display
+	DRAW-DISPLAY 
 ;
 \ startup
 : CONQUEST  ( the main game word)
