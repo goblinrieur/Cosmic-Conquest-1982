@@ -13,9 +13,7 @@ variable fd-in
 \ words
 : COLORIZE ( n -- ) 
 	\ just like terminal ascii \e[31m, here use 31 colorize 
-	ESC EMIT ." [" base @ >R 
-	0 <# #S #> type 
-	R> base ! ." m"  
+	ESC EMIT ." [" base @ >R 0 <# #S #> type R> base ! ." m"  
 ; 
 : home ( -- ) ( set cursor to home position, using ANSI codes)
 	.\" \e[H" 
@@ -41,7 +39,7 @@ decimal
 		0 colorize
 		s" tput cnorm" system
 		page					\ if too old gforth exit ( might not be so possible but ... just in case... ) 
-		bye
+		1 (bye)
 	then
 ;
 \ Read highscore from file & if needed update the file with a new highscrore 
@@ -55,7 +53,7 @@ decimal
 	'src-fd-in @ #src-fd-in @ s>number drop tobeat ! 
 ;
 : highscore? ( finalscore > fd-in -- file )
-	    score @  tobeat @  > if
+	    score @ tobeat @ > if
 		fname count file-status nip if i				\ fileexists ?
 			fname count r/w create-file throw			\ if now create it 
 		else											\ if yes continue
