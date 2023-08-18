@@ -55,7 +55,7 @@ SIZE SIZE ARRAY INFO2 		( strength array)
 	X @ Y @ 
 ;
 : CLEAR-SCREEN ( clear hires screen 1)
-	page
+	false cursor? page \ disable cursor too
 ;
 : CLEAR-DISP ( fill screen array with FF's)
 	1 1 SCREEN 121 255 FILL 
@@ -593,7 +593,7 @@ DECIMAL DROP
 	page			\ clearscreen
 	."  Your final score was : " score @ . cr
 	0 colorize		\ restore colors
-	.\" \e[?25h"	\ restore cursor
+	true cursor?	\ restore cursor
 	0 (bye)			\ exit properly
 ;
 HEX
@@ -602,7 +602,7 @@ HEX
 	IF ( nonzero)
 		1 - BUY-V !
 	ENDIF
-	inkey
+	inkey 
 	CASE
 	   ( J) 4A OF MOVE-LEFT   ENDOF
 	   ( L) 4C OF MOVE-RIGHT  ENDOF
@@ -660,8 +660,9 @@ decimal
 	checkversion page											\ clear screen
 	31 colorize
 	s" gamedata/title.txt" slurp-file type rand1 ! cr			\ title 
-	33 colorize .\" \e[?25l"									\ hide cursor
-	s" gamedata/author.txt" slurp-file cr type key Rand2 ! cr 	\ auhor
+	33 colorize false cursor? 									\ hide cursor
+	s" gamedata/author.txt" slurp-file cr type Rand2 ! cr 	    \ auhor
+	cr ." press space key" begin key 32 = until
 	readfile INITIALISE RESTART 
 ;
 CONQUEST	

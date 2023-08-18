@@ -22,25 +22,30 @@ variable fd-in
 : vhtab ( y x -- x y -- ) ( position cursor on screen, using ANSI codes)
 	swap at-xy
 ;
+: cursor?
+	0 = if .\" \e[?25l" else .\" \e[?25h" then \ true = enable | else disable
+;
+: key ( -- ) \ redifine 
+	['] key catch dup -28 = if exit then throw  \ won t disable ctrl+C in this version  but it is the goal
+;
 \ this woudln't be a problem on the Apple ][ but on modern systems the KEY routine is case sensitive
 HEX		\ thos inkey replacement is idea from bfox9900 reddit.com (":; r/forth" section) 
-: ?lower ( c -- ? ) [CHAR] a [CHAR] z 1+ WITHIN ;
-: toupper ( c -- C ) DUP ?lower if 5F and then ; 
-: inkey ( --c ) key 7f and toupper ; 
-decimal
+: inkey ( --c ) key 7f and dup \ then check if lower then convert
+	[CHAR] a [CHAR] z 1+ WITHIN  if 5F and then ; \ upper & lower key compatibility
+DECIMAL
 \ not really needed as far as I guess noone uses versions of gforth older than 0.7.x
 : checkversion ( -- exit|continue ) 
 	\ check gforth version 
-	version-string 2 - s\" 0.7" str= 0 >= if 		\ easy method to get tooling version
+	version-string s" 0.7" search false = if
 		cr 
 		." you might update your gnu-forth version" cr
 		." prehistoric age is over" cr
 		cr
 		0 colorize
-		s" tput cnorm" system
+		true cursor?
 		page					\ if too old gforth exit ( might not be so possible but ... just in case... ) 
 		1 (bye)
-	then
+	then drop drop
 ;
 \ Read highscore from file & if needed update the file with a new highscrore 
 : readfile

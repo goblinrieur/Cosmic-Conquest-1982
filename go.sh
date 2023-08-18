@@ -2,6 +2,5 @@
 # -*- coding: UTF8 -*-
 fsfile=cosmic_conquest_modern.fs
 runner=$(which gforth-fast)
-[ $(grep gforth-fast <<< ${runner}) ] && $runner $fsfile "$@" || ( echo "gforth not found" && exit 1 )
+[ $(grep gforth-fast <<< ${runner}) ] && $runner $fsfile "$@" 
 exit 0
-
