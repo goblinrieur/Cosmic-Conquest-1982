@@ -1,0 +1,31 @@
+stages:
+  - package
+  - scan
+
+package_and_archive:
+  stage: package
+  image: ubuntu:latest
+  before_script:
+    - apt-get update -y
+    - apt-get install -y tar
+  script:
+    # Create tar.gz archive
+    - tar -czf my_directory.tar.gz --exclude .git --exclude *.tar.gz ./ || true
+  artifacts:
+    paths:
+      - my_directory.tar.gz
+    expire_in: 3 months  # Set artifact expiration to 3 months
+
+kics_scan:
+  stage: scan
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - docker run --rm -v "$(pwd):/src" --entrypoint="" checkmarx/kics:latest kics scan --path /src --output-path /src/report.html --report-formats html || true
+  artifacts:
+    paths:
+      - report.html
